@@ -1,5 +1,5 @@
 ---
-name: alembic-migration-rebase
+name: python-alembic-migration-rebase
 description: Rebase and flatten Alembic database migrations that were created locally but never applied to production environments. Resolves branched migration history by merging heads and recreating migrations in a linear sequence. Use when you have multiple migration heads or migrations that need to be reorganized before production deployment.
 ---
 

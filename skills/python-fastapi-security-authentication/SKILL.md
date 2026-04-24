@@ -1,5 +1,5 @@
 ---
-name: fastapi-security-authentication
+name: python-fastapi-security-authentication
 description: Instructs the agent on all aspects of FastAPI security: protecting API routes using dependency injection, implementing OAuth2 with JWT for bearer token authentication, hashing user passwords with bcrypt or Argon2, secure cookie and session management, OAuth 2.0 Authorization Code flow with state parameter CSRF protection, authorization and access control, and configuring CORS middleware.
 ---
 

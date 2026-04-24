@@ -1,5 +1,5 @@
 ---
-name: fastapi-openapi-documentation
+name: python-fastapi-openapi-documentation
 description: Ensures the agent generates robust, user-friendly automatic OpenAPI documentation (Swagger and ReDoc) by embedding example schemas, adding metadata to path parameters, and visually organizing routes with tags.
 ---
 

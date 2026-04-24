@@ -1,5 +1,5 @@
 ---
-name: fastapi-project-structuring
+name: python-fastapi-project-structuring
 description: Guides the agent on organizing a growing FastAPI application into a clean, modular architecture by separating models, routes, and database configurations into standard directories and keeping the main.py entry point lightweight.
 ---
 

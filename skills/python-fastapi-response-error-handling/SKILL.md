@@ -1,5 +1,5 @@
 ---
-name: fastapi-response-error-handling
+name: python-fastapi-response-error-handling
 description: Instructs the agent on building customized response models using Pydantic, defining specific HTTP status codes, and handling errors gracefully using FastAPI's HTTPException.
 ---
 

@@ -1,5 +1,5 @@
 ---
-name: fastapi-api-testing
+name: python-fastapi-api-testing
 description: Instructs the agent on writing asynchronous unit tests for FastAPI REST API endpoints using pytest and httpx.AsyncClient, creating reusable test fixtures, and generating test coverage reports.
 ---
 

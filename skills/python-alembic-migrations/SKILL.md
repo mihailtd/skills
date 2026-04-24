@@ -1,5 +1,5 @@
 ---
-name: alembic-migrations
+name: python-alembic-migrations
 description: Create and manage Alembic database migrations for PostgreSQL schema changes. Includes critical rules for immutability, idempotency, and Row Level Security (RLS) enforcement. Use when creating new migrations, modifying schema, or working with database changes.
 ---
 
@@ -460,14 +460,14 @@ uv run alembic upgrade head
 
 ### "Multiple head revisions are present"
 
-**Cause**: Migration history has branched (see alembic-migration-rebase skill).
+**Cause**: Migration history has branched (see python-alembic-migration-rebase skill).
 
 **Solution**:
 ```bash
 # Merge heads
 uv run alembic merge -m "merge heads" head1 head2
 
-# Or use the alembic-migration-rebase skill
+# Or use the python-alembic-migration-rebase skill
 ```
 
 ### "Can't locate revision"
@@ -581,7 +581,7 @@ uv run alembic upgrade head
 
 ## Related Resources
 
-- Skill: `alembic-migration-rebase` (for rebasing migrations)
+- Skill: `python-alembic-migration-rebase` (for rebasing migrations)
 - [Alembic Documentation](https://alembic.sqlalchemy.org/)
 - [PostgreSQL RLS Documentation](https://www.postgresql.org/docs/current/ddl-rowsecurity.html)
 

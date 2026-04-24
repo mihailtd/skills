@@ -1,5 +1,5 @@
 ---
-name: fastapi-dependency-injection
+name: python-fastapi-dependency-injection
 description: Instructs the agent on leveraging FastAPI's Depends class to create reusable dependency functions and inject them into path operation function arguments to enforce runtime conditions like database session preparation and authentication.
 ---
 

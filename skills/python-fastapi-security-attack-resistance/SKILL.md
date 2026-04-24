@@ -1,5 +1,5 @@
 ---
-name: fastapi-attack-resistance
+name: python-fastapi-security-attack-resistance
 description: Instructs the agent on mitigating attacks through secure OS interactions, safe data parsing, preventing SQL injection, and configuring robust HTTP headers for XSS, CSRF, CORS, and Clickjacking defense in FastAPI.
 ---
 

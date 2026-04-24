@@ -1,5 +1,5 @@
 ---
-name: fastapi-redis-caching
+name: python-fastapi-redis-caching
 description: Instructs the agent on implementing the Cache-Aside pattern in FastAPI using Redis, both manually for complex logic and declaratively using the fastapi-cache library.
 ---
 

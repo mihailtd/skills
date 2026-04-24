@@ -80,14 +80,14 @@ async def get_item(item_id: int, db: AsyncSession = Depends(get_db)) -> ItemResp
 For structuring, testing, security, and OpenAPI documentation refer to the
 FastAPI domain skills:
 
-- `.github/skills/fastapi-project-structuring/SKILL.md`
-- `.github/skills/fastapi-routing-validation/SKILL.md`
-- `.github/skills/fastapi-dependency-injection/SKILL.md`
-- `.github/skills/fastapi-response-error-handling/SKILL.md`
-- `.github/skills/fastapi-security-authentication/SKILL.md`
-- `.github/skills/fastapi-security-attack-resistance/SKILL.md`
-- `.github/skills/fastapi-api-testing/SKILL.md`
-- `.github/skills/fastapi-openapi-documentation/SKILL.md`
+- `.github/skills/python-fastapi-project-structuring/SKILL.md`
+- `.github/skills/python-fastapi-routing-validation/SKILL.md`
+- `.github/skills/python-fastapi-dependency-injection/SKILL.md`
+- `.github/skills/python-fastapi-response-error-handling/SKILL.md`
+- `.github/skills/python-fastapi-security-authentication/SKILL.md`
+- `.github/skills/python-fastapi-security-attack-resistance/SKILL.md`
+- `.github/skills/python-fastapi-api-testing/SKILL.md`
+- `.github/skills/python-fastapi-openapi-documentation/SKILL.md`
 
 ---
 
@@ -135,10 +135,10 @@ uv run alembic current
 ```
 
 For full migration authoring rules and RLS enforcement see:
-`.github/skills/alembic-migrations/SKILL.md`
+`.github/skills/python-alembic-migrations/SKILL.md`
 
 For rebasing local-only migration branches see:
-`.github/skills/alembic-migration-rebase/SKILL.md`
+`.github/skills/python-alembic-migration-rebase/SKILL.md`
 
 ---
 
@@ -239,18 +239,18 @@ Deeper guidance — consolidated and specialized functional skills:
 python/SKILL.md  ← you are here (master reference)
 │
 ├── Backend Framework
-│   ├── fastapi-project-structuring/SKILL.md
-│   ├── fastapi-routing-validation/SKILL.md
-│   ├── fastapi-dependency-injection/SKILL.md
-│   ├── fastapi-response-error-handling/SKILL.md
-│   ├── fastapi-security-authentication/SKILL.md
-│   ├── fastapi-security-attack-resistance/SKILL.md
-│   ├── fastapi-api-testing/SKILL.md
-│   └── fastapi-openapi-documentation/SKILL.md
+│   ├── python-fastapi-project-structuring/SKILL.md
+│   ├── python-fastapi-routing-validation/SKILL.md
+│   ├── python-fastapi-dependency-injection/SKILL.md
+│   ├── python-fastapi-response-error-handling/SKILL.md
+│   ├── python-fastapi-security-authentication/SKILL.md
+│   ├── python-fastapi-security-attack-resistance/SKILL.md
+│   ├── python-fastapi-api-testing/SKILL.md
+│   └── python-fastapi-openapi-documentation/SKILL.md
 │
 ├── Database & Migrations
-│   ├── alembic-migrations/SKILL.md
-│   └── alembic-migration-rebase/SKILL.md
+│   ├── python-alembic-migrations/SKILL.md
+│   └── python-alembic-migration-rebase/SKILL.md
 │
 ├── Async Patterns
 │   ├── python-asyncio/asyncio-concurrent-web-requests/SKILL.md

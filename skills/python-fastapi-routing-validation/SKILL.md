@@ -1,5 +1,5 @@
 ---
-name: fastapi-routing-validation
+name: python-fastapi-routing-validation
 description: Guides the agent on handling multiple routes modularly using the APIRouter class, validating request bodies using Pydantic models, and properly extracting path and query parameters in FastAPI.
 ---
 
