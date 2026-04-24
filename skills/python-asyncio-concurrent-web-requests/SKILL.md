@@ -1,5 +1,6 @@
 ---
-name: asyncio-aiohttp-concurrent-web-requests
+name: python-asyncio-concurrent-web-requests
+
 description: Instructs the agent on making non-blocking HTTP requests with aiohttp, and managing concurrent execution using asyncio.gather, asyncio.as_completed, and asyncio.wait, including timeout management.
 ---
 

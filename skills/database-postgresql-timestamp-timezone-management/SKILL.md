@@ -1,5 +1,6 @@
 ---
-name: postgresql-timestamp-timezone-management
+name: database-postgresql-timestamp-timezone-management
+
 description: Guides the selection and implementation of the correct timestamp data types (TIMESTAMP WITH TIME ZONE) to prevent global timezone anomalies and Daylight Savings Time (DST) calculation errors.
 ---
 

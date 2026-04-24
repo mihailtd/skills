@@ -1,5 +1,6 @@
 ---
-name: postgresql-recursive-ctes
+name: database-postgresql-recursive-ctes
+
 description: Guides the implementation of Recursive Common Table Expressions (CTEs) to efficiently query hierarchical data structures, prevent infinite loops, and navigate trees in PostgreSQL.
 ---
 

@@ -1,5 +1,6 @@
 ---
-name: postgresql-toast-management
+name: database-postgresql-toast-management
+
 description: Guides the efficient application and monitoring of TOAST (The Oversized-Attribute Storage Technique) for handling exceedingly large row values in PostgreSQL.
 ---
 

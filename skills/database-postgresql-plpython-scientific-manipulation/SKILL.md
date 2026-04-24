@@ -1,5 +1,6 @@
 ---
-name: postgresql-plpython-scientific-manipulation
+name: database-postgresql-plpython-scientific-manipulation
+
 description: Guides the creation and management of PL/Python stored procedures in PostgreSQL for advanced mathematical, scientific, and AI-driven data manipulation.
 ---
 

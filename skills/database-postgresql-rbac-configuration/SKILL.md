@@ -1,5 +1,6 @@
 ---
-name: postgresql-rbac-configuration
+name: database-postgresql-rbac-configuration
+
 description: Guides the configuration of comprehensive Role-Based Access Control (RBAC), managing roles, group hierarchies, privileges, and inheritance across the PostgreSQL database cluster.
 ---
 

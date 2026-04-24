@@ -1,5 +1,6 @@
 ---
-name: postgresql-vectorized-search-ai
+name: database-postgresql-vectorized-search-ai
+
 description: Guides the implementation of Vectorized Search using pgvector in PostgreSQL for emerging AI, machine-learning, and RAG (Retrieval-Augmented Generation) integrations.
 ---
 

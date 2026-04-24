@@ -1,5 +1,6 @@
 ---
-name: python-comprehensive-testing-mocking
+name: python-testing-mocking
+
 description: Instructs the agent on building robust test suites combining pytest, unittest, and doctest. Guides the use of the Arrange-Act-Assert pattern and mandates using unittest.mock.Mock objects and pytest monkeypatch to isolate unpredictable elements like time, randomness, and OS functions.
 ---
 

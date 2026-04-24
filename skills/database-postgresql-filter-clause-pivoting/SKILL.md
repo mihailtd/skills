@@ -1,5 +1,6 @@
 ---
-name: postgresql-filter-clause-pivoting
+name: database-postgresql-filter-clause-pivoting
+
 description: Guides the usage of the high-performance FILTER clause with aggregate functions to pivot data swiftly, replacing complex and slower CASE WHEN statements in PostgreSQL.
 ---
 

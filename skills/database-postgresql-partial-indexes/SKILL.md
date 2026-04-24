@@ -1,5 +1,6 @@
 ---
-name: postgresql-partial-indexes
+name: database-postgresql-partial-indexes
+
 description: Guides the creation of partial indexes to save disk space, reduce maintenance overhead, and dramatically speed up queries targeting specific subsets of data.
 ---
 

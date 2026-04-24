@@ -1,5 +1,6 @@
 ---
-name: postgresql-blob-bytea-handling
+name: database-postgresql-blob-bytea-handling
+
 description: Guides the storage, conversion, and retrieval of binary/BLOB data files utilizing the bytea data type in PostgreSQL.
 ---
 

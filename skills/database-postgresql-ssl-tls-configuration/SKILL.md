@@ -1,5 +1,6 @@
 ---
-name: postgresql-ssl-tls-configuration
+name: database-postgresql-ssl-tls-configuration
+
 description: Guides the configuration of SSL/TLS with strict client certificates for fully encrypted network traffic and secure authentication in PostgreSQL.
 ---
 

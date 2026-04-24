@@ -1,5 +1,6 @@
 ---
-name: postgresql-legacy-database-federation-fdw
+name: database-postgresql-legacy-database-federation-fdw
+
 description: Guides the implementation of Foreign Data Wrappers (oracle_fdw and mysql_fdw) to securely connect, query, and migrate data from legacy remote databases directly within PostgreSQL.
 ---
 

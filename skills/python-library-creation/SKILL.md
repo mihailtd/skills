@@ -81,8 +81,9 @@ and makes packaging behavior consistent.
 The Astral stack is mandatory.
 
 - Add `ruff` as a dev dependency: `uv add --dev ruff`
-- Format code with: `uv run ruff format`
-- Enforce linting with: `uv run ruff check --fix`
+- Format code with: `uv run ruff format .`
+- Enforce linting with: `uv run ruff check .`
+- Fix lint issues automatically with: `uv run ruff check --fix .`
 
 Use `ruff` for both linting and formatting so style and quality are enforced by a
 single toolchain.
@@ -100,6 +101,8 @@ single toolchain.
 
 `ty` should be the primary type checker enforced in CI and documentation. Type
 annotations are mandatory for public APIs, internal functions, and test helpers.
+
+Include `uv run ty check` in the commit-time validation flow alongside Ruff.
 
 ---
 
@@ -157,15 +160,56 @@ artifacts before publishing.
 
 ### Pre-commit
 
-Use `pre-commit` to keep code clean during development.
+Use `pre-commit` to keep Ruff and Ty enforcement in the commit path.
 
 ```bash
 uv add --dev pre-commit
 uv run pre-commit sample-config
-uv run pre-commit install
+uv run pre-commit install --hook-type pre-commit
 ```
 
-Add hooks for `ruff` and `ty` so linting, formatting, and type checking run before
+A minimal `pre-commit` config can run the Astral toolchain directly:
+
+```yaml
+repos:
+  - repo: local
+    hooks:
+      - id: ruff-format
+        name: Ruff format
+        entry: uv run ruff format .
+        language: system
+        types: [python]
+      - id: ruff-check
+        name: Ruff check
+        entry: uv run ruff check .
+        language: system
+        types: [python]
+      - id: ty-check
+        name: Ty type check
+        entry: uv run ty check
+        language: system
+        types: [python]
+```
+
+Install and run the hooks with:
+
+```bash
+uv run pre-commit install
+uv run pre-commit run --all-files
+```
+
+If pre-commit is not available, enforce the same checks in a Git hook at
+`.git/hooks/pre-commit`:
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+uv run ruff format .
+uv run ruff check .
+uv run ty check
+```
+
+This makes Ruff linting/formatting and Ty type checking a guardrail before every
 commit.
 
 ---

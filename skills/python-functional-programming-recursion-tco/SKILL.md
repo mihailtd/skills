@@ -1,5 +1,6 @@
 ---
-name: python-recursion-tco
+name: python-functional-programming-recursion-tco
+
 description: Instructs the agent on manually optimizing recursive algorithms into explicit for loops, generator expressions, or using explicit stacks to bypass Python's recursion limits and lack of automatic tail-call optimization.
 ---
 

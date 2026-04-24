@@ -1,5 +1,6 @@
 ---
-name: postgresql-unused-indexes
+name: database-postgresql-unused-indexes
+
 description: Guides the identification and safe removal of unused or redundant indexes to reclaim storage space and improve database write speeds in PostgreSQL.
 ---
 

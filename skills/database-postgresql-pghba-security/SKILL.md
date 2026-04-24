@@ -1,5 +1,6 @@
 ---
-name: postgresql-pghba-security
+name: database-postgresql-pghba-security
+
 description: Guides the secure configuration of the pg_hba.conf file by enforcing strict IP-based host access control and secure authentication methods, including SCRAM-SHA-256 enforcement and migration.
 ---
 

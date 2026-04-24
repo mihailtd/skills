@@ -1,5 +1,6 @@
 ---
-name: python-decorator-design
+name: python-functional-programming-decorator-design
+
 description: Instructs the agent on creating composite functions using decorators to cleanly handle cross-cutting concerns like null-awareness, bad data filtering, and logging, while strictly mandating the use of functools.wraps.
 ---
 

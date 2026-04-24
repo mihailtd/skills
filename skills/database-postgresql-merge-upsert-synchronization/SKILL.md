@@ -1,5 +1,6 @@
 ---
-name: postgresql-merge-upsert-synchronization
+name: database-postgresql-merge-upsert-synchronization
+
 description: Guides the flawless execution of MERGE and UPSERT (ON CONFLICT) commands to synchronize large data inserts and updates, including PostgreSQL 17 enhancements and NULL handling.
 ---
 

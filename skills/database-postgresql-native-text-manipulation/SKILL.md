@@ -1,5 +1,6 @@
 ---
-name: postgresql-native-text-manipulation
+name: database-postgresql-native-text-manipulation
+
 description: Guides the implementation of intense text manipulation, advanced searching, and custom data validation natively within PostgreSQL using Regex, pg_trgm, Full-Text Search, and Domains, bypassing external languages entirely.
 ---
 

@@ -1,5 +1,6 @@
 ---
-name: postgresql-fdw-federation
+name: database-postgresql-fdw-federation
+
 description: Guides the setup and management of Foreign Data Wrappers (FDWs) using postgres_fdw to federate data, map users, and query multiple remote PostgreSQL clusters efficiently.
 ---
 

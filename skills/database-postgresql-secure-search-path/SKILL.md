@@ -1,5 +1,6 @@
 ---
-name: postgresql-secure-search-path
+name: database-postgresql-secure-search-path
+
 description: Guides the explicit securing of the search_path variable to prevent malicious function spoofing, query hijacking, and privilege escalation in PostgreSQL.
 ---
 

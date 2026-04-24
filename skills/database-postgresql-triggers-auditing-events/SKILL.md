@@ -1,5 +1,6 @@
 ---
-name: postgresql-triggers-auditing-events
+name: database-postgresql-triggers-auditing-events
+
 description: Guides the accurate implementation of PostgreSQL triggers and trigger functions for automated auditing, event checking, and cascading data adjustments.
 ---
 

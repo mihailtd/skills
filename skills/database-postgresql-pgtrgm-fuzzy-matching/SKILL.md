@@ -1,5 +1,6 @@
 ---
-name: postgresql-pgtrgm-fuzzy-matching
+name: database-postgresql-pgtrgm-fuzzy-matching
+
 description: Guides the implementation of fuzzy string matching, similarity scoring, and advanced LIKE/Regex optimization using the pg_trgm (Trigram) extension in PostgreSQL.
 ---
 

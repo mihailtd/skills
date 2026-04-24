@@ -1,5 +1,6 @@
 ---
-name: postgresql-pgaudit-tracking
+name: database-postgresql-pgaudit-tracking
+
 description: Guides the implementation of the pgAudit extension to comprehensively audit and track database access and modifications in PostgreSQL.
 ---
 

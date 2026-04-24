@@ -89,7 +89,8 @@ deploy:
    - Mention GitHub Secrets for credentials.
 
 ```yaml
-name: pulumi-deploy
+name: dev-ops-infrastructure-as-code-pulumi-cicd
+
 on:
   push:
     branches:

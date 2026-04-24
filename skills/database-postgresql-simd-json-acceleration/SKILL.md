@@ -1,5 +1,6 @@
 ---
-name: postgresql-simd-json-acceleration
+name: database-postgresql-simd-json-acceleration
+
 description: Guides the implementation of SIMD (Single Instruction, Multiple Data) acceleration in PostgreSQL 16 to massively optimize ASCII string and JSON data processing.
 ---
 

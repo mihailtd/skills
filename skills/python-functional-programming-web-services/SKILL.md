@@ -1,5 +1,6 @@
 ---
-name: python-functional-web-services
+name: python-functional-programming-web-services
+
 description: >
   Instructs the agent on designing FastAPI route handlers as stateless, functional
   pipelines. It guides decomposing handlers into a cascade of pure functions for

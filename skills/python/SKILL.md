@@ -24,6 +24,7 @@ Read this first; follow the linked domain skills for deeper guidance.
 | Packaging manifest | `pyproject.toml` only |
 | Linter / formatter | `ruff` |
 | Type checker | `ty` |
+| Data processing library | `polars` (not `pandas`) |
 | Backend framework | FastAPI |
 | Database | PostgreSQL |
 | ORM | SQLAlchemy (async) |
@@ -88,6 +89,37 @@ Type annotations are required. `ty` is the preferred type checker for this repos
 - Use `uv run --with ty ty check` to validate the toolchain if you want to compare behaviors.
 
 The repository may still experiment with other checkers such as `mypy` or `pyrefly`, but `ty` is the preferred primary checker and should be the one enforced in CI.
+
+---
+
+## Data Processing — Polars vs DuckDB
+
+This repository prefers `polars` for in-process data engineering and `DuckDB` for SQL-first analytics and large file querying.
+
+- Use **Polars** when the agent is acting as a **Speedster**:
+  - Rust-powered, multithreaded DataFrame processing on a single machine.
+  - Best for complex pipeline chaining, feature engineering, joins, window functions, and programmatic transformations.
+  - Prioritizes throughput and compute speed, with stricter schema and type safety.
+  - Excellent for model preprocessing and integration with Python ML tooling.
+
+- Use **DuckDB** when the agent is acting as a **Librarian**:
+  - In-process SQL database optimized for analytical OLAP queries.
+  - SQL-first intent is more reliable for translating natural language to code.
+  - Better for memory-constrained workloads: DuckDB enforces strict memory limits and can safely query very large datasets.
+  - Ideal for zero-ETL direct cloud querying of remote files in S3 or Google Cloud via URL.
+
+### Decision heuristic
+
+If the task is:
+
+- Exploring new files or cloud storage → **DuckDB**
+  - Best at direct file scanning and SQL exploration.
+- Filtering or sorting massive datasets → **Polars**
+  - Often dominates in raw filtering and loading speed on single nodes.
+- Collaborating or handoff → **DuckDB**
+  - SQL is easier for humans and agents to maintain and debug.
+- Model preprocessing → **Polars**
+  - Better integration with Python ML tools and schema-safe pipelines.
 
 ---
 
@@ -304,7 +336,43 @@ python/SKILL.md  ← you are here (master reference)
 │   └── python-functional-programming/python-pymonad-strict-evaluation/SKILL.md ← opt-in
 │
 ├── Library Creation
-│   └── python-library-creation/SKILL.md
+│   ├── python-library-creation/SKILL.md
+│   └── python-project-setup/SKILL.md
+│
+├── Polars
+│   ├── python-polars-eager-api/SKILL.md
+│   ├── python-polars-lazy-api/SKILL.md
+│   ├── python-polars-attributes-methods/SKILL.md
+│   ├── python-polars-aggregation-methods/SKILL.md
+│   ├── python-polars-computation-methods/SKILL.md
+│   ├── python-polars-descriptive-methods/SKILL.md
+│   ├── python-polars-groupby-methods/SKILL.md
+│   ├── python-polars-exporting-methods/SKILL.md
+│   ├── python-polars-manipulation-methods/SKILL.md
+│   ├── python-polars-reshaping/SKILL.md
+│   ├── python-polars-miscellaneous-methods/SKILL.md
+│   ├── python-polars-expressions-overview/SKILL.md
+│   ├── python-polars-expression-selection/SKILL.md
+│   ├── python-polars-column-operations/SKILL.md
+│   ├── python-polars-expression-creation/SKILL.md
+│   ├── python-polars-expression-combining/SKILL.md
+│   ├── python-polars-expression-operations/SKILL.md
+│   ├── python-polars-row-operations/SKILL.md
+│   ├── python-polars-expression-filtering/SKILL.md
+│   ├── python-polars-expression-groupby-aggregation/SKILL.md
+│   ├── python-polars-expression-sorting/SKILL.md
+│   ├── python-polars-expression-naming/SKILL.md
+│   ├── python-polars-expression-ranges/SKILL.md
+│   ├── python-polars-expression-idioms/SKILL.md
+│   ├── python-polars-reading-writing-data/SKILL.md
+│   ├── python-polars-csv-io/SKILL.md
+│   ├── python-polars-excel-io/SKILL.md
+│   ├── python-polars-parquet-io/SKILL.md
+│   ├── python-polars-json-io/SKILL.md
+│   ├── python-polars-database-io/SKILL.md
+│   ├── python-polars-multi-file-io/SKILL.md
+│   ├── python-polars-encoding-io/SKILL.md
+│   └── python-polars-write-formats/SKILL.md
 │
 ├── Standalone Skills
 │   ├── python-architectural-fitness-functions/SKILL.md

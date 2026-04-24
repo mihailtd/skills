@@ -1,5 +1,6 @@
 ---
-name: postgresql-composite-data-types
+name: database-postgresql-composite-data-types
+
 description: Guides the creation, management, and querying of custom composite data types to implement complex, nested object structures directly within PostgreSQL columns.
 ---
 

@@ -1,5 +1,6 @@
 ---
-name: python-sqlalchemy-repository-data-layer
+name: python-sqlalchemy-repository
+
 description: Instructs the agent on building an asynchronous data layer using SQLAlchemy 2.0 syntax (Mapped, mapped_column), handling database relationships and query optimization, and strictly encapsulating all database access behind the Clean Architecture Repository pattern.
 ---
 

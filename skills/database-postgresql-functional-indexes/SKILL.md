@@ -1,5 +1,6 @@
 ---
-name: postgresql-functional-indexes
+name: database-postgresql-functional-indexes
+
 description: Guides the creation and optimization of functional (expression) indexes to speed up queries that rely on transformed data or computed values in PostgreSQL.
 ---
 

@@ -1,5 +1,6 @@
 ---
-name: postgresql-avoid-legacy-data-types
+name: database-postgresql-avoid-legacy-data-types
+
 description: Guides the avoidance of legacy and restrictive data types natively discouraged by PostgreSQL, such as CHAR, VARCHAR(n), MONEY, SERIAL, and XML, recommending modern alternatives.
 ---
 

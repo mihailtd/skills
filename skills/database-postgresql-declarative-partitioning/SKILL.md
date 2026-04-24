@@ -1,5 +1,6 @@
 ---
-name: postgresql-declarative-partitioning
+name: database-postgresql-declarative-partitioning
+
 description: Guides the implementation of native declarative table partitioning (Range, List, and Hash) to drastically improve query performance and simplify the management of enormous tables.
 ---
 

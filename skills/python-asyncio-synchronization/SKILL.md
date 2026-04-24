@@ -1,5 +1,6 @@
 ---
-name: asyncio-synchronization
+name: python-asyncio-synchronization
+
 description: Instructs the agent on resolving single-threaded concurrency bugs in asyncio, protecting critical sections with Locks, limiting concurrent tasks with Semaphores, and notifying worker tasks with Events and Conditions.
 ---
 

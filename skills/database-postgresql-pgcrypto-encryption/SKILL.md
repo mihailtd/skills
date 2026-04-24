@@ -1,5 +1,6 @@
 ---
-name: postgresql-pgcrypto-encryption
+name: database-postgresql-pgcrypto-encryption
+
 description: Guides the implementation of data encryption at rest using the pgcrypto extension to protect sensitive data fields and ensure compliance in PostgreSQL.
 ---
 

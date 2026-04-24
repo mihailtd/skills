@@ -1,5 +1,6 @@
 ---
-name: postgresql-cte-complex-reporting
+name: database-postgresql-cte-complex-reporting
+
 description: Guides the usage of Common Table Expressions (CTEs) and the WITH clause to organize massively complex reporting queries, including recursion and materialization optimization.
 ---
 

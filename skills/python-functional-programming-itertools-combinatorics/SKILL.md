@@ -1,5 +1,6 @@
 ---
-name: python-itertools-combinatorics
+name: python-functional-programming-itertools-combinatorics
+
 description: Instructs the agent on sophisticated iteration using the itertools standard library for grouping, combining, filtering, and safely generating combinatorial products, permutations, and combinations.
 ---
 

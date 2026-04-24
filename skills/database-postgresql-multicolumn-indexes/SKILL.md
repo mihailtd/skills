@@ -1,5 +1,6 @@
 ---
-name: postgresql-multicolumn-indexes
+name: database-postgresql-multicolumn-indexes
+
 description: Guides the creation, ordering, and optimization of combined (multicolumn) and covering indexes based on query filtering logic in PostgreSQL.
 ---
 

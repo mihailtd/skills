@@ -1,5 +1,6 @@
 ---
-name: postgresql-plpgsql-procedures-transactions
+name: database-postgresql-plpgsql-procedures-transactions
+
 description: Guides the creation of PL/pgSQL stored procedures and functions, distinguishing their capabilities for handling intricate transactional logic and batch processing in PostgreSQL.
 ---
 

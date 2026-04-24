@@ -1,5 +1,6 @@
 ---
-name: postgresql-hash-indexes
+name: database-postgresql-hash-indexes
+
 description: Guides the creation and optimization of Hash indexes for fast equality checks and exact match lookups in PostgreSQL.
 ---
 

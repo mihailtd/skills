@@ -1,5 +1,6 @@
 ---
-name: postgresql-rls
+name: database-postgresql-rls
+
 description: Implement PostgreSQL Row Level Security (RLS) with FastAPI, SQLAlchemy (Async), and Alembic. Covers JWT-based identity injection, helper functions, policy patterns, view/vector search security, connection pooling safety, and integration testing. Use when adding user-level data isolation to any FastAPI + PostgreSQL application.
 ---
 

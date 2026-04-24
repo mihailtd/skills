@@ -1,5 +1,6 @@
 ---
-name: postgresql-kerberos-sso
+name: database-postgresql-kerberos-sso
+
 description: Guides the configuration of Kerberos (GSSAPI) authentication to enable secure enterprise single sign-on (SSO) in PostgreSQL.
 ---
 

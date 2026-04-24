@@ -1,5 +1,6 @@
 ---
-name: postgresql-brin-indexes
+name: database-postgresql-brin-indexes
+
 description: Guides the deployment and optimization of BRIN (Block Range Index) for massive, sequentially organized datasets like time-series tables in PostgreSQL.
 ---
 

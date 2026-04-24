@@ -1,5 +1,6 @@
 ---
-name: postgresql-advanced-sql-development
+name: database-postgresql-advanced-sql-development
+
 description: Guides developers in leveraging advanced SQL features, including Common Table Expressions (CTEs), Window Functions, MERGE statements, JSON processing, and server-side programming in PostgreSQL.
 ---
 

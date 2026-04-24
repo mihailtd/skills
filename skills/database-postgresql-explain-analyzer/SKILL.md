@@ -1,5 +1,6 @@
 ---
-name: postgresql-explain-analyzer
+name: database-postgresql-explain-analyzer
+
 description: Explains the four PostgreSQL query execution phases (Parsing, Rewriting, Optimization, Execution) and analyzes execution plans using EXPLAIN and EXPLAIN ANALYZE to identify performance bottlenecks, missing indexes, and sub-optimal planner choices.
 ---
 

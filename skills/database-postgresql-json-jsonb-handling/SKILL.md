@@ -1,5 +1,6 @@
 ---
-name: postgresql-json-jsonb-handling
+name: database-postgresql-json-jsonb-handling
+
 description: Guides the management of JSON and JSONB structures, utilizing advanced SQL/JSON operators, JSONPath, and GIN indexing for flexible, semi-structured data storage in PostgreSQL.
 ---
 

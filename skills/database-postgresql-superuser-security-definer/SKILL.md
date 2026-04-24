@@ -1,5 +1,6 @@
 ---
-name: postgresql-superuser-security-definer
+name: database-postgresql-superuser-security-definer
+
 description: Guides the restriction of superuser privileges, database ownership best practices, and the careful auditing of SECURITY DEFINER functions to prevent privilege escalation.
 ---
 

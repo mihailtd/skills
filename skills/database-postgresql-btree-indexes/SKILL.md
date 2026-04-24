@@ -1,5 +1,6 @@
 ---
-name: postgresql-btree-indexes
+name: database-postgresql-btree-indexes
+
 description: Guides the creation and optimization of standard B-Tree indexes for typical data retrieval tasks, including single-column, composite, and pattern-matching indexes. Also covers creating custom B-tree operator classes to tailor index behavior for specific data types or custom sort orders.
 ---
 

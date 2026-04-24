@@ -1,5 +1,6 @@
 ---
-name: postgresql-advanced-window-functions
+name: database-postgresql-advanced-window-functions
+
 description: Guides the accurate application of advanced Window Functions, frame clauses, and sliding windows to perform complex analytics and calculate moving averages in PostgreSQL.
 ---
 

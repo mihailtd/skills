@@ -1,5 +1,6 @@
 ---
-name: postgresql-stat-activity-monitor
+name: database-postgresql-stat-activity-monitor
+
 description: Monitors live traffic, analyzes long-running queries, and diagnoses wait events and locks using the pg_stat_activity view in PostgreSQL. Tracks historical query performance, identifies expensive statements, and analyzes aggregated execution statistics using the pg_stat_statements extension.
 ---
 

@@ -1,5 +1,6 @@
 ---
-name: project-management-diterative-incremental-planning
+name: project-management-iterative-incremental-planning
+
 description: Guides teams to use both iterative and incremental thinking when planning software delivery.
 ---
 

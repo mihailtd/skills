@@ -1,5 +1,6 @@
 ---
-name: postgresql-postgis-geospatial-management
+name: database-postgresql-postgis-geospatial-management
+
 description: Guides the implementation of the PostGIS extension to accurately store, query, and index multi-dimensional geospatial data and geographic locations in PostgreSQL.
 ---
 

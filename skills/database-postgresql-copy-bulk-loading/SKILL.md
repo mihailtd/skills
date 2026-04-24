@@ -1,5 +1,6 @@
 ---
-name: postgresql-copy-bulk-loading
+name: database-postgresql-copy-bulk-loading
+
 description: Guides the usage of the highly optimized COPY command for high-speed bulk data loading, bidirectional extraction, and graceful error handling during imports in PostgreSQL.
 ---
 

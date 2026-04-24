@@ -1,5 +1,6 @@
 ---
-name: organization-map
+name: architecture-diagrams-organization-map
+
 description: >
   Guide for creating an Organization Map diagram that visualizes internal
   business units, external partners, and the working relationships between them.

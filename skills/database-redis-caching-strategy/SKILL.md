@@ -1,5 +1,6 @@
 ---
-name: redis-caching-strategy
+name: database-redis-caching-strategy
+
 description: Instructs the agent on advanced Redis caching strategies, including managing TTLs to prevent memory bloat, applying jitter to prevent cache stampedes, and using Lua scripting for atomic server-side caching.
 ---
 

@@ -1,5 +1,6 @@
 ---
-name: postgresql-rls-enforcement
+name: database-postgresql-rls-enforcement
+
 description: Guides the implementation of Row-Level Security (RLS) to restrict user access to specific table rows based on defined policies and user identity.
 ---
 

@@ -1,5 +1,6 @@
 ---
-name: postgresql-lateral-joins
+name: database-postgresql-lateral-joins
+
 description: Guides the usage of LATERAL JOINs to iterate subqueries successfully row-by-row, enabling parameterized subqueries and loop-like behavior in PostgreSQL.
 ---
 

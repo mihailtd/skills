@@ -1,5 +1,6 @@
 ---
-name: postgresql-dynamic-sql-execution
+name: database-postgresql-dynamic-sql-execution
+
 description: Guides the secure and efficient execution of dynamic SQL within PostgreSQL functions to overcome traditional planner limitations, avoid cached plan performance degradation, and prevent SQL injection.
 ---
 
