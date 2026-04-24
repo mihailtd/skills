@@ -21,6 +21,9 @@ Read this first; follow the linked domain skills for deeper guidance.
 | Concern | Choice |
 |---|---|
 | Package manager & task runner | `uv` |
+| Packaging manifest | `pyproject.toml` only |
+| Linter / formatter | `ruff` |
+| Type checker | `ty` |
 | Backend framework | FastAPI |
 | Database | PostgreSQL |
 | ORM | SQLAlchemy (async) |
@@ -55,8 +58,36 @@ uv lock --upgrade
 ```
 
 Pin all production dependencies with `==` for reproducible builds.
+Do not use `requirements.txt`, `requirements-dev.txt`, or any requirements directory for dependency management. All package metadata and dependency configuration belongs in `pyproject.toml`.
+Use `uv` for every operation that touches packages, tools, or builds. Never run `pip`, `pip install`, `python -m pip`, `poetry`, or `pipenv` directly in this project.
 See the **upgrade-dependencies** skill for the full upgrade workflow:
 `.github/skills/upgrade-dependencies/SKILL.md`
+For library-specific guidance, see `.github/skills/python-library-creation/SKILL.md`.
+
+---
+
+## Linting and Formatting — Astral Stack Mandatory
+
+The Astral stack is mandatory for Python projects in this repository. `ruff` is the canonical linter and formatter.
+
+- Add `ruff` as a dev dependency: `uv add --dev ruff`
+- Use `uv run ruff format` to format code.
+- Use `uv run ruff check --fix` to run linting and automatically fix issues where possible.
+- Document these commands in your project scripts or README.
+
+`ruff` is the single source of truth for formatting and style consistency across code, tests, and configuration.
+
+---
+
+## Type Checking — `ty` Preferred
+
+Type annotations are required. `ty` is the preferred type checker for this repository.
+
+- Add `ty` as a dev dependency: `uv add --dev ty`
+- Run type checks with `uv run ty check`
+- Use `uv run --with ty ty check` to validate the toolchain if you want to compare behaviors.
+
+The repository may still experiment with other checkers such as `mypy` or `pyrefly`, but `ty` is the preferred primary checker and should be the one enforced in CI.
 
 ---
 
@@ -271,6 +302,9 @@ python/SKILL.md  ← you are here (master reference)
 │   ├── python-functional-programming/python-itertools-combinatorics/SKILL.md
 │   ├── python-functional-programming/python-recursion-tco/SKILL.md
 │   └── python-functional-programming/python-pymonad-strict-evaluation/SKILL.md ← opt-in
+│
+├── Library Creation
+│   └── python-library-creation/SKILL.md
 │
 ├── Standalone Skills
 │   ├── python-architectural-fitness-functions/SKILL.md
