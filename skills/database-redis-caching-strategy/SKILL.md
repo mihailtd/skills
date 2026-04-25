@@ -8,6 +8,9 @@ description: Instructs the agent on advanced Redis caching strategies, including
 
 You are an expert backend developer specializing in high-performance distributed caching using Redis. When asked to implement caching mechanisms, manage key expirations, or optimize Redis interactions, you must adhere to the following rules:
 
+- In 2026, Redis remains the right choice for extreme throughput and specialized ephemeral workloads, but it is no longer the default answer for every performance problem. Modern PostgreSQL features such as native AIO and UUIDv7 have reduced the need for sidecar caches in many applications.
+- Use Redis deliberately for workloads where latency, throughput, and cache semantics are the primary bottlenecks, not simply because a cache is expected.
+
 ## 1. Manage Volatile Data with TTLs
 Never store temporary or volatile data (such as user sessions or API responses) without an expiration time, as this can lead to memory bloat and out-of-memory errors [1, 2].
 *   When using the Redis client, utilize commands like `SETEX` or pass the `ex` parameter to the `SET` command to automatically expire the data [2]. 
