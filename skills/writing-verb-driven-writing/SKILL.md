@@ -1,3 +1,8 @@
+---
+name: writing-verb-driven-writing
+description: Assists in applying verb driven writing techniques to improve written text.
+---
+
 # Verb-Driven Writing and Review
 
 This skill guides the review and improvement of writing (fiction, non-fiction, copywriting, journalism) by applying the principle: "Honor the verb, sacrifice the adjective."

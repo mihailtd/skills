@@ -1,3 +1,8 @@
+---
+name: writing-verb-versatility-and-verbals
+description: Assists in applying verb versatility and verbals techniques to improve written text.
+---
+
 # Verb Versatility and Verbals Writing Review
 
 This skill guides the review and improvement of writing by utilizing the versatility of verbs—specifically leveraging "verbals" (participles, gerunds, and verbal nouns) to inject action, economy, and dynamic energy into sentences.
