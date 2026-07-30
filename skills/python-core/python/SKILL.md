@@ -163,7 +163,12 @@ don't mix ORMs/ODMs within the same service.
 - Use **MongoDB** when:
   - Data is naturally document-shaped — nested, variable, or maps closely to your API's JSON payloads.
   - The schema evolves frequently per-document and you don't want a migration gate on every change.
-  - You need high write throughput or horizontal scale via sharding (see the **database-mongodb** package for sharding/replication skills).
+  - You want application-transparent horizontal sharding built into the database
+    itself, without adopting a separate scaling layer (see the **database-mongodb**
+    package for sharding/replication skills). PostgreSQL scales to very high
+    write throughput too — via partitioning, read replicas, and extensions like
+    Citus — this isn't "Postgres can't scale," it's whether you want that
+    sharding behavior built in by default versus layered on deliberately.
   - Cross-entity transactions are rare-to-none in your access patterns.
 
 ### Decision heuristic
