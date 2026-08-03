@@ -69,11 +69,27 @@ def analyze_job_description(state, config: RunnableConfig):
 3. **Show fake LLM testing**
    - Use fake models to simulate failure and validate resilience.
 
+Legitimate exception, not a functional-lite violation: this looks like the
+"stateful service class" anti-pattern, but it isn't one. The retry
+demonstration in the next step depends on this *same* iterator surviving a
+raised exception on attempt 1 and successfully continuing on attempt 2 (that's
+the entire scenario being tested). A generator function can't do this — a
+`yield`-based generator that raises unhandled terminates permanently; asking
+it for another value afterward raises `StopIteration`, not the next item. A
+class implementing `__iter__`/`__next__` is the correct, idiomatic tool
+specifically because it's the one shape that lets per-call state (`_count`)
+outlive a raised exception, the same way a context manager's `__enter__`/
+`__exit__` protocol requires a class. This is a language-protocol exception,
+not a framework one, but the same rule applies: use the class only for what
+the protocol demands, nothing more:
+
 ```python
 from langchain_core.language_models import GenericFakeChatModel
 from langchain_core.messages import AIMessage
 
 class MessagesIterator:
+    """Alternates failure/success on each next() call — state must
+    survive a raised exception, which a generator function cannot do."""
     def __init__(self):
         self._count = 0
 

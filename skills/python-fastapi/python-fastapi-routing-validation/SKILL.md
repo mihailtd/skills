@@ -19,6 +19,17 @@ Do not use the main `FastAPI()` instance to handle all routing operations, as th
 
 Always validate request bodies to sanitize data and reduce the risk of malicious attacks.
 
+**Functional-lite note:** `class Todo(BaseModel)` is a legitimate framework-
+mandated exception to this repo's "no OOP classes for business logic" rule
+(same category as SQLAlchemy's `DeclarativeBase`) — FastAPI's request/
+response validation is wired through Pydantic's `BaseModel` machinery, there
+is no functional-lite substitute for it, and it should be used without
+hesitation. The rule this exception does *not* cover: don't attach business
+logic methods to a `BaseModel` beyond validators — a `BaseModel` is a
+request/response DTO (see python-clean-architecture-request-response-models
+and python-clean-architecture-fastapi-boundary if this project uses the
+`python-clean-architecture` package), not a place for service-style methods.
+
 - Create models by subclassing `BaseModel` from the `pydantic` library.
 - Use these models as type hints for the request body objects in your route handlers.
 - **Nested Models:** Use nested Pydantic models when complex JSON body structures are required.
@@ -93,3 +104,7 @@ app = FastAPI()
 # Make the modular routes visible
 app.include_router(todo_router)
 ```
+
+## Related guidance
+
+For where Pydantic request/response models and route handlers sit relative to Clean Architecture's layers (if this project uses the `python-clean-architecture` package), see python-clean-architecture-fastapi-boundary. For update endpoints specifically, see python-fastapi-partial-updates — a naive full-object overwrite on a PUT/PATCH route silently clears any field the client didn't send.

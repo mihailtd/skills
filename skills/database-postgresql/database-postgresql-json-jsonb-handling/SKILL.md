@@ -30,3 +30,12 @@ Guide the user to extract and filter data using PostgreSQL's native operators:
 *   **GIN Indexing:** Instruct the user to create a Generalized Inverted Index (GIN) on their JSONB columns to dramatically improve search performance and avoid full table scans (e.g., `CREATE INDEX idx_name ON table_name USING GIN (jsonb_column);`).
 *   **Index Limitations:** Warn the user that while GIN indexes are incredibly powerful for JSONB, they do not support searches on date-time attributes, the `LIKE` operator, or transformed attribute values inside the JSON.
 *   **SIMD Acceleration:** Mention that starting in PostgreSQL 16, the database engine automatically utilizes SIMD (Single Instruction, Multiple Data) acceleration for processing JSON and ASCII strings, which natively optimizes query response times for analytical JSON queries.
+
+---
+
+## Related guidance
+
+SQL antipattern(s) this resolves (from the `sql-antipatterns` package):
+
+- sql-antipatterns-entity-attribute-value
+- sql-antipatterns-multicolumn-attributes

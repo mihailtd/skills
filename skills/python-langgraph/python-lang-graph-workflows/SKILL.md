@@ -151,3 +151,5 @@ Use this tool alongside:
 - python-lang-graph-state-management
 - python-lang-graph-output-parsing
 - python-lang-graph-error-handling
+- python-lang-graph-workflow-vs-agent-patterns
+- python-lang-graph-agent-suitability

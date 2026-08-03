@@ -84,5 +84,5 @@ A strong opening/mid/endgame recommendation should be:
 Use this tool alongside:
 
 - project-management-vertical-slicing-delivery
-- project-management-diterative-incremental-planning
+- project-management-iterative-incremental-planning
 - project-management-estimate-with-measurement

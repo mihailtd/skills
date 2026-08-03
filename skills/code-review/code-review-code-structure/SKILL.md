@@ -1,6 +1,6 @@
 ---
 name: code-review-code-structure
-description: Guides AI reviewers to evaluate code structure, detect architectural code smells, and recommend cleaner functional-lite designs.
+description: Guides AI reviewers to evaluate code structure, detect architectural code smells, and recommend cleaner functional-lite designs — including flagging commented-out code, likely-dead/unused code, defensive validation duplicated across call sites, and feature flags that look fully settled in production for deletion.
 ---
 
 # Code Review: Code Structure
@@ -92,6 +92,56 @@ Produce a code review that:
      design.
    - Ensure error handling is explicit and not silently swallowed.
 
+8. **Flag commented-out code for deletion, not preservation**
+   - Any commented-out block of code in a PR is a hard flag: recommend
+     deletion, not "leave it in case we need it later." The codebase is
+     under version control — the commit history is the correct place to
+     recover an old version, not a comment block sitting in the current
+     source.
+   - This applies regardless of how the comment is phrased ("keeping this
+     for reference," "TODO: remove," an entire disabled function) — the
+     recommendation is the same: delete it, and trust `git log`/`git blame`
+     to recover it if it's ever actually needed again.
+   - Distinguish this from a genuine explanatory comment (documentation,
+     a warning about a non-obvious constraint) — this point targets dead
+     *code* left in comment form, not prose commentary.
+
+9. **Flag dead/unused code as a heuristic finding, not an exhaustive guarantee**
+   - Cross-reference a function, endpoint, or module's definition against
+     its call sites; if nothing in the codebase still imports or calls it,
+     flag it as a likely removal candidate. State this as a best-effort
+     check (grep-based cross-referencing), not a proof of dead code —
+     confirming genuine unreachability rigorously requires control-flow
+     analysis, which is out of scope for a manual/line-level review.
+   - A deprecated-but-never-removed endpoint or function is a
+     particularly sharp case worth naming explicitly: it's a trap for a
+     future engineer who finds it, assumes it's live, and builds on it.
+
+10. **Flag defensive validation duplicated across many call sites**
+    - Repeated inline null/empty/required-field checks scattered across
+      many functions handling the same kind of object (common in
+      dynamically-typed code without upfront schema validation) is a
+      consolidation candidate — recommend a single validation
+      function/model called from every site instead of duplicated checks.
+    - Recommend the consolidation as a careful, file-by-file audit rather
+      than a global find-and-replace: some of the "duplicate" checks may
+      not actually be identical on inspection (an intentionally different
+      constraint at one call site), and blindly collapsing them risks a
+      real regression. In this codebase, the target shape is usually a
+      Pydantic model validating the shape once at the boundary — see
+      **python-fastapi-routing-validation** — rather than a hand-written
+      `validate_x` helper threaded through every call site.
+
+11. **Flag feature flags that look fully settled, not still in flux**
+    - A feature-flag check (`if settings.FEATURE_X`, a flags/toggles
+      config lookup) where the flag has clearly been fully enabled (or
+      fully disabled) in production for a meaningful stretch, with no
+      remaining variance in which path actually executes, should be
+      flagged the same way as commented-out code — recommend removing the
+      flag and collapsing to whichever path is actually live. Only make
+      this recommendation once the flag's settled status is reasonably
+      confirmed, not speculatively.
+
 ---
 
 ## Decision points and guidance
@@ -108,6 +158,18 @@ Produce a code review that:
   local until a stable abstraction emerges.
 - **Is the flow easy to follow?** If no, recommend simplifying control paths,
   adding explicit branches, or clarifying intent.
+- **Is there commented-out code in the diff?** If yes, recommend deletion —
+  never "leave it just in case." Version control already preserves it.
+- **Is anything defined here never actually called elsewhere?** If so, flag
+  it as a likely-dead-code candidate (heuristic, not proven), with a
+  never-removed deprecated endpoint/function called out specifically.
+- **Is the same validation logic duplicated across many call sites?** If
+  yes, recommend consolidating into a single validation function/model
+  (a Pydantic model at the boundary in this codebase) — but audit each
+  site individually before collapsing them.
+- **Does a feature flag in this diff look fully settled in production?** If
+  so, recommend removing it and collapsing to the live path, once that
+  settled status is actually confirmed.
 
 ---
 
@@ -145,3 +207,12 @@ This skill complements:
 - architecture-risk-management
 - project-management-adaptive-project-management
 - business-analysis-scope
+- code-review-cognitive-load-smells
+- code-review-linguistic-antipatterns
+- python-fastapi-routing-validation (package `python-fastapi`) — the
+  concrete Pydantic-at-the-boundary fix for point 10's defensive
+  validation duplication.
+- architecture-refactoring-decision-criteria (package `architecture`) —
+  when dead code, duplicated validation, or a stale flag found here is
+  extensive enough to warrant a dedicated refactoring effort rather than
+  a PR-sized fix.

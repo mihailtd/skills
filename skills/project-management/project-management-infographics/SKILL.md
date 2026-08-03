@@ -104,4 +104,4 @@ Use this tool alongside:
 - project-management-story-visualizations
 - architecture-diagrams-goal-objective-diagram
 - architecture-diagrams-information-map
-- project-management-roadmap-planning
+- architecture-diagrams-roadmap

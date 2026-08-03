@@ -16,7 +16,7 @@ Add `-g` to install globally instead of per-project. Use `--skill <name>` (repea
 npx skills add mihailtd/skills/skills/database-mongodb --skill database-mongodb-aggregation-framework
 ```
 
-## Skills (33)
+## Skills (34)
 
 - **[database-mongodb-aggregation-framework](database-mongodb-aggregation-framework/SKILL.md)** — Guides the agent on MongoDB aggregation framework fundamentals, pipeline structure, stage order, and best practices for building powerful server-side data transformations.
 - **[database-mongodb-aggregation-join-optimization](database-mongodb-aggregation-join-optimization/SKILL.md)** — Guides the agent on MongoDB aggregation join optimization, including $lookup indexing, join order, $unwind fusion, and $graphLookup tuning.
@@ -39,6 +39,7 @@ npx skills add mihailtd/skills/skills/database-mongodb --skill database-mongodb-
 - **[database-mongodb-resharding](database-mongodb-resharding/SKILL.md)** — Guides the agent on MongoDB resharding and shard key refinement, including procedure, limitations, and practical tradeoffs.
 - **[database-mongodb-schema-design](database-mongodb-schema-design/SKILL.md)** — Guides the agent on MongoDB schema design, workload-driven modeling, embedding versus referencing, and applying data model rules for flexible document schemas.
 - **[database-mongodb-schema-modeling-patterns](database-mongodb-schema-modeling-patterns/SKILL.md)** — Guides the agent on MongoDB schema modeling patterns, including workload-driven design, subsetting, vertical partitioning, attribute patterns, and trade-offs for flexible schemas.
+- **[database-mongodb-temporal-modeling](database-mongodb-temporal-modeling/SKILL.md)** — BSON's Date type is always an absolute instant with no native civil-date or naive-local-datetime type — storing a birthdate or future local event as Date risks the same timezone-shift bugs as misusing TIMESTAMPTZ; use a plain ISO-8601 string instead for anything that isn't genuinely an instant, plus a separate IANA zone-name field for future local events.
 - **[database-mongodb-shard-balancing](database-mongodb-shard-balancing/SKILL.md)** — Guides the agent on MongoDB shard balancing, chunk distribution, balancer windows, and migration tuning.
 - **[database-mongodb-shard-key-selection](database-mongodb-shard-key-selection/SKILL.md)** — Guides the agent on selecting and evaluating MongoDB shard keys, including cardinality, access patterns, and range vs hashed keys.
 - **[database-mongodb-sharded-query-tuning](database-mongodb-sharded-query-tuning/SKILL.md)** — Guides the agent on tuning queries for MongoDB sharded clusters, including shard targeting, explain plans, sorts, and aggregation behavior.

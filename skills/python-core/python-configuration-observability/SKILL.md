@@ -278,3 +278,7 @@ LOGGING_CONFIG = {
 
 logging.config.dictConfig(LOGGING_CONFIG)
 ```
+
+## Related guidance
+
+For the Clean Architecture layer boundaries this skill's logging/tracing setup respects (why the JSON formatter and trace-ID middleware live in `infrastructure/`, and use cases only ever see `logging.getLogger(__name__)`), see the `python-clean-architecture` package — especially python-clean-architecture-dependency-rule and python-clean-architecture-composition-root. For verifying these boundaries stay intact as the codebase grows, see python-architectural-fitness-functions. For why exceptions specifically must be logged through this skill's structured logger rather than `print()`/a raw stack-trace dump — including the "stdout is fine, unstructured output isn't" correction for this project's Kubernetes/Datadog setup — see architecture-exception-design-and-anti-patterns (package `architecture`).

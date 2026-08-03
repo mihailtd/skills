@@ -582,6 +582,7 @@ uv run alembic upgrade head
 ## Related Resources
 
 - Skill: `python-alembic-migration-rebase` (for rebasing migrations)
+- Skill: `architecture-data-storage-schema-evolution` (package `architecture`) — for a change too risky for a single migration/deploy (renaming a column, changing its meaning) without downtime, sequence it as expand → dual-write → backfill → cutover → contract across multiple Alembic revisions rather than one.
 - [Alembic Documentation](https://alembic.sqlalchemy.org/)
 - [PostgreSQL RLS Documentation](https://www.postgresql.org/docs/current/ddl-rowsecurity.html)
 

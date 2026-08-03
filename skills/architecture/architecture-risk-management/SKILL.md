@@ -112,6 +112,8 @@ This skill complements:
 
 - architecture-building-with-failure-in-mind
 - architecture-diagrams-risk-matrix
+- architecture-stages-of-change
+- architecture-investment-mindset
 - project-management-sprint-planning
 - project-management-adaptive-project-management
 - business-analysis-scope

@@ -105,6 +105,6 @@ A strong development-cycle-planning response should ensure the team is:
 Use this tool alongside:
 
 - project-management-story-workshops
-- project-management-story-splitting-and-thin
+- project-management-split-and-thin
 - project-management-story-mapping-basics
 - project-management-build-to-learn

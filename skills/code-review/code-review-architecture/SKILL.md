@@ -153,5 +153,7 @@ This skill complements:
 - code-review-code-structure
 - code-review-data-structures
 - code-review-detect-bad-design
+- code-review-clean-architecture-boundaries
+- code-review-clean-architecture-functional-style
 - architecture-risk-management
 - architecture-building-with-failure-in-mind

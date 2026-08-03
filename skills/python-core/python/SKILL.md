@@ -27,6 +27,7 @@ Read this first; follow the linked domain skills for deeper guidance.
 | Linter / formatter | `ruff` |
 | Type checker | `ty` |
 | Data processing library | `polars` (not `pandas`) |
+| SQL-first analytics / file querying | `duckdb` — see the decision heuristic below |
 | Backend framework | FastAPI |
 | Database | PostgreSQL or MongoDB — see the decision guide below |
 | Relational path | SQLAlchemy (async) + Alembic |
@@ -93,9 +94,38 @@ The repository may still experiment with other checkers such as `mypy` or `pyref
 
 ---
 
+## Data Processing — Polars, never pandas
+
+This project uses **Polars**, not pandas, for all Python data processing.
+
+- Rust-based, multi-threaded execution engine (uses all CPU cores) vs.
+  pandas' single-threaded, eager, step-by-step execution.
+- Apache Arrow columnar memory layout (efficient, shareable without
+  copying) vs. NumPy-array-backed pandas, where common operations create
+  intermediate copies.
+- Lazy evaluation (`.lazy()` + `.collect()`) builds and optimizes the
+  *entire* query plan — reordering filters, dropping unused columns —
+  before running anything; pandas has no equivalent and runs every step
+  immediately, in the order written.
+- Scales to multi-gigabyte, larger-than-RAM datasets via streaming; pandas
+  needs the dataset to fit comfortably in memory.
+- Expression-based chaining (`pl.col(...)`) reads as a declarative
+  pipeline; prefer it over translating pandas' imperative `.loc`/`.iloc`
+  idioms.
+- If a third-party library strictly requires a pandas `DataFrame`, convert
+  at that one boundary with `.to_pandas()` — don't let it justify pandas
+  usage elsewhere in the pipeline.
+
+Deeper guidance — full justification and a side-by-side syntax comparison:
+**python-polars-vs-pandas**. Polars API mechanics (eager vs. lazy,
+expressions, I/O): see the `python-polars` package.
+
+---
+
 ## Data Processing — Polars vs DuckDB
 
-This repository prefers `polars` for in-process data engineering and `DuckDB` for SQL-first analytics and large file querying.
+Once Polars is the chosen in-process engine, this repository also uses
+`DuckDB` for SQL-first analytics and large file querying.
 
 - Use **Polars** when the agent is acting as a **Speedster**:
   - Rust-powered, multithreaded DataFrame processing on a single machine.
@@ -122,6 +152,60 @@ If the task is:
 - Model preprocessing → **Polars**
   - Better integration with Python ML tools and schema-safe pipelines.
 
+DuckDB mechanics — connecting, table CRUD, querying Polars DataFrames and files
+in place, and a deeper decision heuristic — live in the **database-duckdb**
+package, not here. For the full comparison and combination guide (DuckDB vs./+
+Polars, DuckDB vs./+ PostgreSQL), see that package's
+**database-duckdb-polars-postgresql-integration** skill.
+
+---
+
+## Data Processing — When Polars/DuckDB Aren't Enough (Spark)
+
+This repository's projects don't operate at a scale where Apache Spark or any
+other distributed engine is warranted — don't reach for one by default, and
+don't add it "in case we need it later." Polars scales up (a bigger single
+machine); DuckDB's out-of-core engine extends that further by streaming
+data larger than RAM from a single machine's disk. Both have a real ceiling —
+one machine's maximum disk size and I/O throughput — but that ceiling is far
+higher than "this dataset feels big," typically hundreds of GB to low TB on
+a single well-resourced instance.
+
+Spark exists for a different problem: data that genuinely doesn't fit on any
+single practical machine, or that already lives distributed across a cluster
+at a volume where centralizing it first isn't feasible. Its distributed model
+necessarily pays a network-shuffling cost a single-machine engine never pays
+at all — which is exactly why staying on Polars/DuckDB as long as the data
+actually fits is not just simpler, it's structurally faster for anything that
+does fit.
+
+Full decision framework — concrete signals worth checking before assuming
+you've outgrown a single machine, what Spark's data-locality/partitioning/
+broadcast-join model buys once that's real, and the operational cost of a
+cluster — see **python-polars-vs-spark**.
+
+---
+
+## Notebooks — marimo, never Jupyter
+
+This project uses **marimo**, not Jupyter, for all Python notebooks.
+
+- Notebooks are stored as plain `.py` files (`import marimo` + `@app.cell`),
+  never as `.ipynb`.
+- Reactive execution eliminates the stale-output, out-of-order-execution
+  bugs Jupyter permits: changing a cell automatically re-runs everything
+  downstream of it.
+- No hidden state — each variable is defined in exactly one cell, so a
+  fresh top-to-bottom run always matches the current interactive state.
+- Notebooks diff cleanly in git (plain code, not JSON blobs with execution
+  counts) and run directly as scripts or CLI tools without an export step.
+- Flag any `.ipynb` file encountered in this project during review and
+  convert it rather than extending it in place.
+
+Deeper guidance — full justification, idiomatic marimo authoring, and using
+`marimo pair` for live AI-agent pairing inside a notebook session:
+**python-notebooks-marimo**.
+
 ---
 
 ## Backend — FastAPI
@@ -146,6 +230,15 @@ FastAPI domain skills: **python-fastapi-project-structuring**, **python-fastapi-
 **python-fastapi-dependency-injection**, **python-fastapi-response-error-handling**,
 **python-fastapi-security-authentication**, **python-fastapi-security-attack-resistance**,
 **python-fastapi-api-testing**, **python-fastapi-openapi-documentation**.
+
+**Startup initialization** — construct the DB engine/pool and verify
+connectivity, and warm any required cache, eagerly inside the `lifespan`
+handler, before `yield`. Don't defer this to first use inside a `Depends`
+function: an eager failure fails the readiness probe and halts a Kubernetes
+rolling deployment before it reaches real traffic; a lazy one surfaces only
+once the broken pod is already serving production requests. See
+**python-lazy-vs-eager-initialization** for the full tradeoff and when a
+genuinely optional resource is still a reasonable candidate for lazy init.
 
 ---
 
@@ -472,6 +565,13 @@ python/SKILL.md  ← you are here (master reference, package: python-core)
 ├── Library Creation                             [package: python-core]
 │   ├── python-library-creation/SKILL.md
 │   └── python-project-setup/SKILL.md
+│
+├── Notebooks                                    [package: python-core]
+│   └── python-notebooks-marimo/SKILL.md
+│
+├── Data Processing (decision)                   [package: python-core]
+│   ├── python-polars-vs-pandas/SKILL.md
+│   └── python-polars-vs-spark/SKILL.md
 │
 ├── Polars                                       [package: python-polars]
 │   ├── python-polars-eager-api/SKILL.md

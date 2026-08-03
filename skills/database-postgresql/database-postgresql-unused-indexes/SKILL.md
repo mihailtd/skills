@@ -29,3 +29,11 @@ Before the user drops any index, warn them to check for the following exceptions
 *   **Read Replicas (The Hidden Danger):** Strongly warn the user that index statistics are strictly specific to the local instance. An index might show `0` scans on the primary master node but be heavily utilized for reporting queries on a standby read replica. Because physical replication mirrors the primary, dropping the index on the primary will instantly delete it from the replica, potentially destroying report performance.
 *   **Primary Keys & Unique Constraints:** Explain that some indexes, particularly primary keys, might never be used for data retrieval (showing `idx_scan = 0`) but are absolutely vital for enforcing data integrity and uniqueness. These must never be removed.
 *   **Periodic Queries:** Remind the user not to blindly drop indexes. An index might be unused daily but critically required for end-of-month or end-of-year batch jobs.
+
+---
+
+## Related guidance
+
+SQL antipattern(s) this resolves (from the `sql-antipatterns` package):
+
+- sql-antipatterns-index-shotgun

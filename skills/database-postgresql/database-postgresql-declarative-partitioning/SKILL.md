@@ -60,3 +60,11 @@ Guide the user to select one of the three supported declarative partitioning met
 #### 6. Verifying Partition Pruning
 *   **`constraint_exclusion` Parameter:** Instruct the user to check their `postgresql.conf` settings. PostgreSQL relies on the `constraint_exclusion` parameter to allow the query planner to skip table scans using constraints. Ensure this parameter is set to its default value of `partition` (or `on`). If it is accidentally set to `off`, PostgreSQL will not examine constraints and will fail to prune partitions.
 *   **Validating with EXPLAIN:** Guide the user to use `EXPLAIN` or `EXPLAIN ANALYZE` to verify that pruning is working. If successful, the plan will only show scans on the relevant child partitions and will completely omit the pruned ones.
+
+---
+
+## Related guidance
+
+SQL antipattern(s) this resolves (from the `sql-antipatterns` package):
+
+- sql-antipatterns-metadata-tribbles

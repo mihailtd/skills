@@ -121,4 +121,5 @@ Use this tool alongside:
 
 - architecture-building-with-failure-in-mind
 - architecture-risk-management
+- architecture-simplicity
 - project-management-adaptive-project-management

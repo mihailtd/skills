@@ -1,7 +1,7 @@
 ---
 name: python-sqlalchemy-repository
 
-description: Instructs the agent on building an asynchronous data layer using SQLAlchemy 2.0 syntax (Mapped, mapped_column), handling database relationships and query optimization, and strictly encapsulating all database access behind the Clean Architecture Repository pattern.
+description: Instructs the agent on building an asynchronous data layer using SQLAlchemy 2.0 syntax (Mapped, mapped_column), handling database relationships and query optimization, and strictly encapsulating all database access behind the Repository pattern — as a closure-based factory function per python-clean-architecture-drivers, not an ABC-implementing class, when the project uses the python-clean-architecture package.
 ---
 
 # Python SQLAlchemy Repository & Data Layer Guidelines
@@ -10,8 +10,9 @@ You are an expert Python developer specializing in Clean Architecture, database 
 
 ## 1. The Repository Pattern (Clean Architecture)
 Do not leak SQLAlchemy implementation details (like `Session`, `select`, or ORM models) into the core business logic (Application/Domain layers).
-*   **The Interface (Domain Layer):** Define an abstract base class (e.g., `class OrderRepository(ABC):`) in the domain layer that outlines required database operations using pure Python types and domain entities.
-*   **The Adapter (Infrastructure Layer):** Implement the concrete class (e.g., `class PostgresOrderRepository(OrderRepository):`) in the outer infrastructure layer. This class accepts the database session, executes SQLAlchemy code, and maps relational data back into pure Domain entities before returning.
+*   **The Interface (Domain/Application Layer):** the required database operations (`get_by_id`, `save`, ...) are expressed as `Callable` type aliases (e.g., `GetOrder = Callable[[int], Order | None]`), not an abstract base class — see python-clean-architecture-dependency-inversion. There is no `class OrderRepository(ABC)` in this repo's style.
+*   **The Adapter (Infrastructure Layer):** implemented as a factory function that opens over the `AsyncSession` (or a session-provider callable) and returns plain functions matching those `Callable` types — see python-clean-architecture-drivers for the closure-based pattern. **Not** a class implementing the ABC (`class PostgresOrderRepository(OrderRepository)`, shown below in section "Code Examples" as the *classic* reference pattern, is the shape to translate away from, not to copy directly, in a `python-clean-architecture` project).
+*   This distinction matters specifically because it changes how the repository is tested: a closure-returned function needs only a stand-in function to test against (see python-clean-architecture-test-doubles), never `Mock(spec=OrderRepository)`.
 
 ## 2. Modern SQLAlchemy 2.0 Model Definition
 Define your database schema using SQLAlchemy's modern, strongly-typed 2.0 declarative syntax.
@@ -113,6 +114,8 @@ async def get_sponsor_contributions(db_session: AsyncSession, event_id: int):
 
 **3. The Repository Pattern Implementation**
 
+**3a. Classic pattern (ABC + concrete class)** — this is the pattern most Clean Architecture reference material shows. Recognize it, but do not copy it into a `python-clean-architecture` project:
+
 ```python
 from abc import ABC, abstractmethod
 from typing import Optional
@@ -146,3 +149,47 @@ class PostgresEventRepository(EventRepository):
         # Map the ORM model back to the pure Domain Entity
         return EventEntity(id=db_model.id, name=db_model.name)
 ```
+
+**3b. This repo's pattern (`Callable` type + closure)** — the same behavior, no `ABC`, no repository class, per python-clean-architecture-drivers:
+
+```python
+from dataclasses import dataclass
+from typing import Callable
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
+
+# -- DOMAIN LAYER (No SQLAlchemy imports here) --
+@dataclass(frozen=True)
+class EventEntity:
+    id: int
+    name: str
+
+# The "port" — a Callable type, not an ABC
+GetEvent = Callable[[int], "EventEntity | None"]
+
+# -- INFRASTRUCTURE LAYER (SQLAlchemy isolated inside the closure) --
+def make_sqlalchemy_event_repository(session: AsyncSession) -> GetEvent:
+    async def get_event(event_id: int) -> EventEntity | None:
+        query = select(EventModel).where(EventModel.id == event_id)
+        result = await session.execute(query)
+        db_model = result.scalars().first()
+        if not db_model:
+            return None
+        # Map the ORM model back to the pure Domain Entity
+        return EventEntity(id=db_model.id, name=db_model.name)
+    return get_event
+
+# Usage at the composition root (see python-clean-architecture-composition-root):
+# get_event = make_sqlalchemy_event_repository(session)
+```
+
+---
+
+## Related guidance
+
+For the full functional-lite repository/driver pattern this skill's section 1 and 3b apply (Callable-typed ports, closure-based factory functions, no ABC, testing with stand-in functions instead of `Mock(spec=...)`), see the `python-clean-architecture` package:
+
+- python-clean-architecture-drivers
+- python-clean-architecture-dependency-inversion
+- python-clean-architecture-composition-root
+- python-clean-architecture-test-doubles

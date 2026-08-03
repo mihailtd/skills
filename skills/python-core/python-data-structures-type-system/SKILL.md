@@ -2,10 +2,10 @@
 name: python-data-structures-type-system
 description: >
   Instructs the agent on choosing the right built-in collections (mutable vs. immutable),
-  mandating the typing module for static analysis via mypy, enforcing Pydantic for
-  run-time data validation, and using Protocol, NewType, Sequence, and Literal to
-  enforce architectural boundaries. Use when designing data models, defining interfaces,
-  or working with type annotations.
+  mandating the typing module for static analysis via `ty`, enforcing Pydantic for
+  run-time data validation, and using Union/Optional syntax, type aliases, NewType,
+  Sequence, and Literal to enforce architectural boundaries. Use when designing data
+  models, defining interfaces, or working with type annotations.
 ---
 
 # Python Data Structures & Type System Guidelines
@@ -30,22 +30,55 @@ Before putting data into a collection, map the unique features of the collection
 
 ## Part 2: Static Type Hinting
 
-### 2. Mandatory Type Hints (`mypy`)
+### 2. Mandatory Type Hints, Checked with `ty`
 
-Type hints are essential to good software design; they prevent problems by enforcing rigor and formality without adding run-time overhead. Provide type hints for all collections.
+Type hints are essential to good software design; they prevent problems by enforcing rigor and formality without adding run-time overhead. Provide type hints for all collections, function parameters, and return values. `ty` is this repository's preferred static type checker (see the `python` master skill) — type hints are written for `ty` to verify, not left as unchecked decoration.
 
 *   Use standard generics like `list[int]`, `set[str]`, or `dict[str, int]`.
 *   For heterogeneous collections, define a union of types using the `|` operator (e.g., `list[int | float]`).
 *   Decompose complex nested type hints into layers using `TypeAlias` to make them readable.
 *   Use `typing.TypedDict` or `typing.NamedTuple` for dictionary-like or tuple-like structures with specific, named fields.
+*   Run `uv run ty check` locally and in CI — see python-project-setup for wiring `ty` into pre-commit hooks and GitHub Actions.
 
-### 3. Duck-Typing Interfaces with `Protocol`
+### 2a. Union and Optional Types
 
-Avoid rigid class hierarchies and explicit inheritance where possible.
+Use the modern `|` syntax for union and optional types (Python 3.10+ syntax; this repo targets 3.11+ — see the `python` master skill) instead of `typing.Union`/`typing.Optional`.
 
-*   Use `typing.Protocol` to define structural subtyping interfaces. This combines Python's duck typing flexibility with static type checking benefits.
-*   Classes implicitly conform to a Protocol just by implementing the required methods — no subclassing is needed.
-*   This aligns with the Dependency Inversion Principle without forcing inner layers to inherit from abstract base classes.
+*   A value that can be one of several types: `data: str | int`, not `Union[str, int]`.
+*   An optional value (may be `None`): `user_id: int | None = None`, not `Optional[int]`.
+*   At architectural boundaries (use-case inputs, function return values crossing a layer), use unions to make every valid shape of the data explicit rather than smuggling multiple meanings into one loosely-typed parameter.
+*   Prefer a narrower union or a dedicated type over `X | None` when `None` is being used to represent something more specific than "absent" (e.g., use a `Literal["not_found"]` or a small result type instead of overloading `None` to mean several different failure states).
+
+### 2b. Type Aliases for Readability, Not Just Nesting
+
+Reach for `TypeAlias` (or the plain `NameX = ...` assignment form, which `ty` also recognizes) whenever a type signature is reused across the codebase or is complex enough that its shape isn't obvious at a glance — not only when a type is deeply nested.
+
+```python
+from typing import TypeAlias
+
+UserId: TypeAlias = int
+UserRecord: TypeAlias = dict[str, str]
+UserList: TypeAlias = list[UserRecord]
+
+def process_users(users: UserList) -> None: ...
+```
+
+*   A named alias documents intent (`UserList` reads as "a list of user records," not just "a list of dicts") — treat this as documentation that `ty` also verifies, not merely a readability nicety.
+*   Prefer `NewType` over a plain alias specifically when two aliases share the same underlying type but must never be interchanged (see rule 4) — a plain `TypeAlias` does not prevent mixing `UserId` and `ProductId` if both are really just `int`.
+
+### 2c. `Any` Is a Last Resort, Not a Convenience
+
+Treat `typing.Any` as an explicit admission that a type is genuinely unknown or highly variable (e.g., data crossing a boundary with an external system that provides no schema) — not as a way to avoid writing a real type.
+
+*   Within this codebase's own layers, encountering `Any` should prompt refactoring toward a specific type, a union, or a `TypeAlias` — never leave it as the default when the actual shape of the data is knowable.
+*   Reserve `Any` for genuine external-system boundaries, and narrow it to a real type as soon as possible after the data enters the codebase (e.g., validate untyped external input into a Pydantic model immediately, per rule 7, rather than passing `Any` deeper into the call stack).
+
+### 3. Prefer `Callable` Type Aliases over `Protocol` for Single-Operation Dependencies
+
+For a single swappable operation (a "port" a use case depends on — sending a notification, looking up a price, persisting an entity), type it as a `Callable[[...], ...]` alias and pass a plain function, not a `Protocol`-typed single-method interface implemented by a class. See python-clean-architecture-dependency-inversion for the full pattern and rationale — this is this repo's default mechanism for dependency inversion, and it requires no class at all.
+
+*   Reserve `typing.Protocol` for the narrower case of typing a *bundle* of several related callables structurally (e.g., a repository needing both a lookup and a save operation) when passing each function as a separate parameter becomes unwieldy — and even then, a `NamedTuple`/frozen `dataclass` of callables is usually simpler and is the preferred default; reach for `Protocol` only when callers at a public boundary need to pass "anything with this shape" without importing a specific bundle type.
+*   Never use `Protocol` (or `ABC`) to type something that has real business-logic behavior beyond plain data or callables — if reference material shows a `Protocol` with one method implemented by classes with no other purpose, reformulate it as a `Callable` alias and plain functions.
 
 ### 4. Distinct Domain Identifiers with `NewType`
 
@@ -108,23 +141,31 @@ def is_valid_command(cmd: str) -> bool:
     return cmd in ValidCommands
 ```
 
-**2. Protocol for Duck-Typing Interfaces**
+**2. `Callable` Alias for a Single-Operation Dependency (preferred over `Protocol` + class)**
+
+```python
+from typing import Callable
+
+# The "port" — a function type, not a class-based interface
+NotifierFn = Callable[[str], None]
+
+def send_email_notification(message: str) -> None:
+    print(f"Sending email: {message}")
+
+def notify(notifier: NotifierFn, message: str) -> None:
+    notifier(message)
+
+notify(send_email_notification, "Hello via email")
+```
+
+**2a. `Protocol` Reserved for a Bundle of Callables (narrow, less common case)**
 
 ```python
 from typing import Protocol
 
-class NotificationPort(Protocol):
-    def send_notification(self, message: str) -> None:
-        ...
-
-# Implicitly conforms — no subclassing required
-class EmailNotifier:
-    def send_notification(self, message: str) -> None:
-        print(f"Sending email: {message}")
-
-class NotificationService:
-    def __init__(self, notifier: NotificationPort):
-        self.notifier = notifier
+class UserRepo(Protocol):
+    get_by_id: Callable[[str], dict]
+    save: Callable[[dict], None]
 ```
 
 **3. NewType for Domain Identifiers**
@@ -184,3 +225,7 @@ class LogData(BaseModel):
 def parse_log_data(raw_data: dict) -> LogData:
     return LogData.model_validate(raw_data)
 ```
+
+## Related guidance
+
+For the full functional-lite dependency-inversion pattern this skill's `Callable`/`Protocol` guidance is part of (never `ABC`, `NamedTuple`/dataclass bundling, parameter-passing instead of constructor injection), see the `python-clean-architecture` package, specifically **python-clean-architecture-dependency-inversion**.

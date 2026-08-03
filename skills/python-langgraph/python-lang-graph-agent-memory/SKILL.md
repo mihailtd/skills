@@ -145,6 +145,14 @@ def persist_memory(state: MemoryState):
    - Explain when to use Redis, MongoDB, or another database.
    - Show a simple custom cache node using Redis.
 
+`RedisCache(BaseCache)` is a legitimate framework-mandated exception, not a
+functional-lite violation: `langchain_core`'s `set_llm_cache()` integration
+point requires an object satisfying `BaseCache`'s `lookup`/`update` method
+contract — the same category of exception as subclassing SQLAlchemy's
+`DeclarativeBase` or `logging.Formatter`. Keep the subclass minimal (state
+limited to what the protocol needs — here, the Redis client handle — no
+extra business logic riding along inside it):
+
 ```python
 import redis
 from langchain_core.schema import BaseCache
@@ -239,3 +247,4 @@ Use this tool alongside:
 - python-lang-graph-state-management
 - python-lang-graph-agentic-architectures
 - python-lang-graph-output-parsing
+- python-lang-graph-context-engineering-strategies

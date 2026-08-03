@@ -24,3 +24,11 @@ Follow these structured guidelines to assist the user:
 
 #### 4. Key Management Practices
 *   **Protecting the Keys:** Strongly emphasize that efficient key management practices are absolutely essential for maintaining data confidentiality and integrity. Remind the user that the encrypted data is only as secure as the storage and handling of the decryption keys themselves.
+
+---
+
+## Related guidance
+
+SQL antipattern(s) this resolves (from the `sql-antipatterns` package):
+
+- sql-antipatterns-readable-passwords

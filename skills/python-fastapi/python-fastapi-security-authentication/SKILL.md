@@ -89,18 +89,25 @@ Ensure the API can be securely consumed by frontend applications by handling cro
 
 ### `hash_password.py` — Password Hashing (bcrypt)
 
+Functional-lite: `create_hash`/`verify_hash` never touched `self` — there was no
+state to justify a class. `pwd_context` is module-level, shared config, not
+instance state, so this is two free functions closing over it, not a service
+object:
+
 ```python
 from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-class HashPassword:
-    def create_hash(self, password: str):
-        return pwd_context.hash(password)
+def create_hash(password: str) -> str:
+    return pwd_context.hash(password)
 
-    def verify_hash(self, plain_password: str, hashed_password: str):
-        return pwd_context.verify(plain_password, hashed_password)
+def verify_hash(plain_password: str, hashed_password: str) -> bool:
+    return pwd_context.verify(plain_password, hashed_password)
 ```
+
+Call as `create_hash(password)` / `verify_hash(plain, hashed)` — no
+`HashPassword()` instantiation step anywhere in the call chain.
 
 ---
 

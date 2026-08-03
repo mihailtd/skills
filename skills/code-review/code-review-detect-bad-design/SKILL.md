@@ -144,4 +144,6 @@ This skill complements:
 - code-review-code-structure
 - code-review-data-structures
 - architecture-building-with-failure-in-mind
+- architecture-inheritance-coupling-tradeoffs (package `architecture`) — the design-time tradeoff behind an inheritance-based coupling smell found at review time
 - architecture-risk-management
+- code-review-cognitive-load-smells

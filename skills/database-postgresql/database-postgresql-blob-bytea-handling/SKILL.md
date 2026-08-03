@@ -53,3 +53,11 @@ Follow these structured guidelines to assist the user:
         with open(output_path, 'wb') as file:
             file.write(binary_data)
     ```.
+
+---
+
+## Related guidance
+
+SQL antipattern(s) this resolves (from the `sql-antipatterns` package):
+
+- sql-antipatterns-phantom-files

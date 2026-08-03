@@ -99,4 +99,4 @@ Use this tool alongside:
 - project-management-infographics
 - project-management-story-visualizations
 - architecture-diagrams-organization-map
-- project-management-roadmap-planning
+- architecture-diagrams-roadmap

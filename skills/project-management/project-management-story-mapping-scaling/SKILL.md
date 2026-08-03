@@ -93,6 +93,6 @@ A strong scaling recommendation should be:
 
 Use this tool alongside:
 
-- project-management-open-mid-endgame-strategy
+- project-management-opening-mid-endgame-strategy
 - project-management-risk-story-mapping
 - project-management-feature-discovery-to-delivery

@@ -9,6 +9,19 @@ You are an expert Python developer specializing in Beanie, the asynchronous Mong
 
 ## 1. Document Definition
 
+**Functional-lite note:** subclassing `Document` is a legitimate framework-
+mandated exception to this repo's "no OOP classes for business logic" rule
+— the same category as SQLAlchemy's `DeclarativeBase` or Pydantic's
+`BaseModel` (which `Document` itself extends). Beanie's ODM machinery
+(schema declaration, `_id` handling, `Link`/`BackLink` resolution) is wired
+through class inheritance; there's no functional-lite substitute for the
+model declaration itself. The rule this exception does *not* cover: don't
+attach business-rule methods to a `Document` beyond field declarations and
+Pydantic validators — a `Document` is a persistence-layer schema (see
+python-clean-architecture-domain-modeling for where the actual domain
+entity and its business rules live, if this project uses the
+`python-clean-architecture` package).
+
 Subclass `Document` (not Pydantic's `BaseModel` directly) for anything that maps to a MongoDB collection. Every `Document` automatically gets an `id` field backed by MongoDB's `_id` (defaults to `PydanticObjectId`; override with a `Field` annotation if you need a different id type).
 
 - Declare fields exactly like a Pydantic model — types, defaults, validators all work as usual.
@@ -146,3 +159,12 @@ houses = await House.find(House.name == "Beach House", fetch_links=True).to_list
 ## 7. When to reach for raw PyMongo instead
 
 Beanie's abstraction is worth leaving for bulk/aggregation-heavy work — complex `$lookup`/`$facet` aggregation pipelines, large bulk writes, or anything where the ODM layer adds overhead without ergonomic benefit. Drop to the underlying `AsyncMongoClient` (`Model.get_motor_collection()` or your own client handle) for those cases rather than fighting the ODM.
+
+---
+
+## Related guidance
+
+If this project uses the `python-clean-architecture` package: `Document` subclasses are a legitimate framework-mandated exception (like SQLAlchemy models — see the `python` master skill), but the repository *wrapping* them should be a closure-based factory function, not a class implementing an ABC. See:
+
+- python-clean-architecture-drivers
+- python-clean-architecture-dependency-inversion

@@ -13,6 +13,7 @@ An important part of creating trustworthy software is running a wide variety of 
 *   **`pytest`:** The primary framework. Use `pytest` for functional test definitions utilizing built-in `assert` statements and reusable fixtures.
 *   **`unittest`:** Use `unittest.TestCase` classes when you need sophisticated, object-oriented test setups that diverge from the "happy path" or test large datasets.
 *   **Execution:** Run the full suite with `pytest`. The `pytest` runner can discover and execute both `pytest`-style and `unittest`-style tests automatically.
+*   **Clean Architecture code:** `Mock`/`monkeypatch` here are for genuinely unpredictable module-level things (time, randomness, the OS/filesystem) — for a repository or service dependency in Clean Architecture code, use a plain stand-in function instead, since those dependencies are `Callable` types, not ABCs. See the `python-clean-architecture` package's python-clean-architecture-test-doubles.
 
 ## 2. The Arrange-Act-Assert (GIVEN-WHEN-THEN) Pattern
 Structure all test scenarios using the Arrange-Act-Assert (or GIVEN-WHEN-THEN) pattern to clearly define the test's intent.

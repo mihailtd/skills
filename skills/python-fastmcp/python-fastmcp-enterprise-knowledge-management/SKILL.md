@@ -1,0 +1,148 @@
+---
+name: python-fastmcp-enterprise-knowledge-management
+description: Guides teams to build Enterprise Knowledge Management (EKM) systems with FastMCP — implementing federated search across enterprise repositories (SharePoint, Confluence, CRMs), opaque cursor-based pagination (nextCursor), document classification (public/internal/confidential), field redaction, and knowledge graph traversal.
+---
+
+# Python FastMCP: Enterprise Knowledge Management (EKM)
+
+This skill helps AI design and build Enterprise Knowledge Management (EKM) systems using FastMCP. By wrapping fragmented organizational repositories (SharePoint, Confluence, file shares, CRMs, SQL databases) into standardized FastMCP servers, organizations create a unified, context-aware knowledge layer that supports federated search, role-based classification, field redaction, and large-scale pagination without rewriting legacy backend APIs.
+
+---
+
+## When to use this skill
+
+Use this skill when you need to:
+
+- connect fragmented enterprise repositories into a unified AI-accessible knowledge system,
+- implement **Federated Search** across multiple departmental FastMCP servers,
+- handle large document collections using opaque cursor-based pagination (`nextCursor`),
+- enforce document security classifications (`public`, `internal`, `confidential`, `restricted`),
+- implement dynamic field redaction and context-aware access control for sensitive records,
+- expose structured Knowledge Graph relationships via MCP resources or tools,
+- generate analytical summaries and domain statistics over enterprise corpora.
+
+---
+
+## Outcome
+
+Produce an EKM FastMCP server or client aggregator that:
+
+- wraps legacy document stores behind standardized JSON-RPC endpoints (`resources/list`, `resources/read`, `tools/call`),
+- paginates large resource lists using opaque `nextCursor` tokens,
+- filters search queries by department, classification level, and recency (`lastModified`),
+- redacts sensitive fields or restricts confidential records based on caller credentials,
+- exposes analytical summary tools (`get_summary()`) alongside granular document access.
+
+---
+
+## Instructions for the AI
+
+1. **Implement Enterprise Document Store Resource Provider**
+   - Model enterprise documents with explicit metadata: `title`, `department`, `author`, `created_date`, `classification`, `tags`, and `lastModified`.
+   - Expose document URIs (`doc://{id}`) with lightweight resource metadata for discovery (`list_resources`), deferring full content rendering to `read_resource`.
+   - Example FastMCP implementation:
+     ```python
+     from typing import List, Optional
+     from pydantic import BaseModel
+     from mcp.server.fastmcp import FastMCP, Context
+
+     mcp = FastMCP("enterprise-knowledge-base")
+
+     class DocumentMetadata(BaseModel):
+         title: str
+         department: str
+         author: str
+         classification: str  # "public", "internal", "confidential"
+         created_date: str
+         tags: List[str]
+
+     DOCUMENTS_DB = {
+         "doc-001": {
+             "metadata": DocumentMetadata(
+                 title="Employee Handbook",
+                 department="HR",
+                 author="HR Team",
+                 classification="internal",
+                 created_date="2026-01-15",
+                 tags=["policy", "hr", "benefits"],
+             ),
+             "content": "Full company policies and guidelines...",
+         },
+         "doc-002": {
+             "metadata": DocumentMetadata(
+                 title="Q4 Financial Summary",
+                 department="Finance",
+                 author="CFO",
+                 classification="confidential",
+                 created_date="2026-01-10",
+                 tags=["finance", "quarterly", "revenue"],
+             ),
+             "content": "Confidential revenue metrics and forecasts...",
+         },
+     }
+
+     @mcp.resource("doc://{doc_id}")
+     def get_document(doc_id: str, ctx: Context) -> str:
+         """Retrieve a document by ID with security classification checks."""
+         if doc_id not in DOCUMENTS_DB:
+             raise ValueError(f"Document '{doc_id}' not found.")
+         
+         doc = DOCUMENTS_DB[doc_id]
+         meta = doc["metadata"]
+
+         # Field Redaction / Access Control
+         user_role = ctx.request_context.meta.get("user_role", "standard") if ctx.request_context else "standard"
+         if meta.classification == "confidential" and user_role != "executive":
+             return f"Title: {meta.title}\nClassification: CONFIDENTIAL\nContent: [REDACTED - Unauthorized Access]"
+
+         return f"Title: {meta.title}\nDepartment: {meta.department}\nContent:\n{doc['content']}"
+     ```
+
+2. **Support Opaque Cursor-Based Pagination (`nextCursor`)**
+   - Large enterprise collections MUST use cursor-based pagination for `resources/list` and `tools/list` to protect servers from memory exhaustion.
+   - Treat `nextCursor` as an opaque token generated by the server. Clients supply `cursor` on subsequent calls without mutating token strings.
+
+3. **Implement Federated Search Tools**
+   - Provide search tools (`search_documents`) supporting keyword matching, department filtering, and security classification parameters.
+   - Return preview snippets (e.g. 100 characters) in search result listings to help agents determine relevance before reading full resource URIs.
+
+4. **Implement Knowledge Graph Entity Traversal**
+   - Expose relationship URIs (`graph://entity/{id}/relations`) or tools (`get_related_entities`) so agents can traverse connections across policies, projects, and teams.
+
+5. **Enforce Security, Audit Logging, and Data Loss Prevention (DLP)**
+   - Log all resource reads and search tool calls with caller IDs, timestamp, classification level, and redaction flags.
+   - Never expose unredacted confidential data without verifying caller authorization attributes.
+
+---
+
+## Decision points and guidance
+
+- **Federated Search vs Central Repository?** Prefer Federated Search across specialized FastMCP servers (HR Server, Legal Server, Finance Server) to preserve domain boundaries and distinct access control rules.
+- **How to handle tacit knowledge?** Create tools allowing authorized agents or domain experts to record verified Q&A summaries or meeting decisions into the document store.
+- **When to redact content vs reject access?** Redact sensitive fields (e.g. salary, SSN, confidential forecast figures) when non-confidential sections of a document are relevant; reject access entirely when the document metadata itself is restricted.
+
+---
+
+## Quality criteria
+
+- **Unified Standard Interface:** Legacy data sources (SharePoint, Confluence, CRMs) speak the same JSON-RPC MCP operations (`resources/list`, `resources/read`, `tools/call`).
+- **Classification Enforced:** Confidential documents enforce access controls or field redaction.
+- **Scalable Pagination:** `resources/list` responses handle cursor pagination (`nextCursor`).
+- **Audit Compliance:** Access to classified resources is recorded in structured audit logs.
+
+---
+
+## Example prompts
+
+- "Wrap our internal Confluence wiki in a FastMCP server with role-based document redaction."
+- "Implement cursor-based pagination and a search_documents tool for an enterprise document store."
+- "Create a federated search client that aggregates responses from HR and Finance FastMCP servers."
+
+---
+
+## Related guidance
+
+- python-fastmcp-resource-providers
+- python-fastmcp-security-discovery
+- python-fastmcp-rag-retrieval
+- python-fastmcp-client-integration

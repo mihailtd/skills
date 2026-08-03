@@ -7,6 +7,10 @@ description: Instructs the agent to write automated tests (fitness functions) th
 
 You are an expert Python developer specializing in Clean Architecture and automated architectural verification. When asked to write tests that ensure the structural integrity of a codebase or prevent architectural drift, you must create "fitness functions" and adhere to the following rules:
 
+"Fitness function" is Neal Ford, Rebecca Parsons, and Patrick Kua's term (from *Building Evolutionary Architectures*) for an automated test that verifies an architectural characteristic rather than a functional behavior — the same way a unit test verifies code behavior. Run these as part of the normal test suite (`pytest tests/architecture`) so a violation is caught within seconds on a developer's own machine — a "shift left" catch, long before code review or CI, and certainly before the violation becomes an established pattern others copy.
+
+For how to *design* the layers this skill verifies — functional-lite Functional Core/Imperative Shell structure, the Dependency Rule, dependency inversion without ABCs, and Screaming Architecture naming — see the `python-clean-architecture` package (python-clean-architecture-functional-core-imperative-shell, python-clean-architecture-dependency-rule, python-clean-architecture-dependency-inversion, python-clean-architecture-screaming-architecture). This skill assumes that layering already exists and checks it stays intact.
+
 ## 1. Verifying Layer Structure
 Before checking dependencies, ensure the codebase maintains its explicit, well-defined layer organization.
 * Use `pathlib.Path` to inspect the root application directory.
@@ -85,10 +89,12 @@ class TestDependencyRules(unittest.TestCase):
             for node in ast.walk(tree):
                 if isinstance(node, ast.Import) or isinstance(node, ast.ImportFrom):
                     # Safely handle the import name extraction
-                    module = node.names.name if isinstance(node, ast.Import) else node.module
+                    # ast.Import.names is a list of aliases (e.g. `import a.b, c.d`);
+                    # take the first one. ast.ImportFrom has a single `module` string.
+                    module = node.names[0].name if isinstance(node, ast.Import) else node.module
                     
                     if module and module.startswith("my_app."):
-                        layer = module.split(".")[16]
+                        layer = module.split(".")[1]
                         
                         # 4. Check if the import references an outer layer
                         if layer in ["infrastructure", "interfaces", "application"]:
@@ -104,3 +110,12 @@ class TestDependencyRules(unittest.TestCase):
             "\nDependency Rule Violations:\n" + "\n".join(violations)
         )
 ```
+
+## 4. Extending Beyond the Two Core Checks
+
+Structure and Dependency Rule checks are the high-impact starting point, not the ceiling. Once these are in place, consider extending fitness functions to:
+* **Interface conformance:** verify a `Callable`-typed dependency's concrete implementations actually match the expected signature (see the `python-clean-architecture` package's dependency-inversion pattern — there's no ABC to check `issubclass` against, so this means signature inspection via `inspect.signature`, not an `isinstance`/`issubclass` check).
+* **Naming/molds consistency:** verify a project's established name molds are followed (see the `code-review` package's code-review-naming-consistency for the concept these checks would automate).
+* **Layer-specific rules:** add custom checks for constraints specific to one layer (e.g., no `async def` inside `domain/`, since domain functions should be pure and synchronous — see python-clean-architecture-functional-core-imperative-shell's async/await-as-shell-signal test).
+
+Start with the two checks above; add more only once they've proven their value in practice, evolving fitness functions alongside the architecture rather than trying to anticipate every violation up front.

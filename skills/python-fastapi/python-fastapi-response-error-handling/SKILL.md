@@ -85,3 +85,7 @@ async def get_single_todo(todo_id: int = Path(..., title="The ID of the todo to 
         detail="Todo with supplied ID doesn't exist."
     )
 ```
+
+## Related guidance
+
+For translating a Clean Architecture `Result[T]` (`Success`/`Failure`) into an `HTTPException` at the route boundary (if this project uses the `python-clean-architecture` package), see python-clean-architecture-fastapi-boundary and python-domain-error-handling.

@@ -7,6 +7,19 @@ description: Guides teams to manage LangGraph workflow state in Python, includin
 
 This skill helps AI explain how to design and manage workflow state in LangGraph. It covers typed state schemas, reducers, message accumulation, state immutability, and configurable graphs.
 
+**Functional-lite note:** a `TypedDict` (or dataclass/Pydantic) state schema
+is data, not an OOP class — it carries fields and type hints, never methods
+or `self`-mutating behavior, and LangGraph itself treats state as
+conceptually a plain dict that nodes return *updates* to rather than mutate
+in place. Defining state this way isn't a framework-mandated exception to
+functional-lite the way an ORM model or `logging.Formatter` subclass is —
+it's already the functional-lite pattern this repo uses everywhere else
+(see the `python` master skill's "Data over objects" rule), just spelled
+`class Foo(TypedDict)` instead of `@dataclass class Foo`. Don't let a state
+class's `class` keyword read as "this package uses OOP" — check whether it
+has any method beyond field declarations before treating it as an exception
+at all.
+
 ---
 
 ## When to use this skill

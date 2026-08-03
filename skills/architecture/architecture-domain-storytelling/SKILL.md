@@ -144,3 +144,4 @@ This skill complements:
 - Stakeholder Map
 - Application/Information Concept Diagram
 - Architecture Roadmap
+- python-clean-architecture-legacy-assessment (Event Storming, a related collaborative discovery technique, for legacy Python Clean Architecture migrations specifically)

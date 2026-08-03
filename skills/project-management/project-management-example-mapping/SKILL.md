@@ -87,4 +87,3 @@ Use this advice alongside:
 - project-management-requirements-discovery-workshops
 - project-management-feature-mapping
 - project-management-story-workshops
-- project-management-formulate-phase

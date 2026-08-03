@@ -31,3 +31,12 @@ Follow these structured guidelines to assist the user:
 #### 5. Timezone Ignorance
 *   **Naive Timestamps:** Remind the user to avoid `TIMESTAMP WITHOUT TIME ZONE` and `TIME WITH TIME ZONE`. These types lack Daylight Savings Time (DST) and timezone context, leading to incorrect duration calculations.
 *   **The Solution:** Always default to using **`TIMESTAMP WITH TIME ZONE`** (`TIMESTAMPTZ`), which safely records an absolute moment in time using the same 8 bytes of storage.
+
+---
+
+## Related guidance
+
+SQL antipattern(s) this resolves (from the `sql-antipatterns` package):
+
+- sql-antipatterns-rounding-errors
+- sql-antipatterns-storing-prices

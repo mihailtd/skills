@@ -72,6 +72,8 @@ good example: `checkResult`
 
 **Guideline:** prefer clear names even if longer. Optimize for readers and maintainers.
 
+For the deeper, research-backed treatment of naming (why it matters, single-letter variable risk, camelCase vs. snake_case, and codebase-wide naming consistency), see code-review-naming-fundamentals, code-review-naming-word-choice, and code-review-naming-consistency.
+
 ---
 
 ### 3) `BASE_URL` must be only the base (no path, no query)

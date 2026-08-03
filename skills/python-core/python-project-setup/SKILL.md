@@ -1,6 +1,6 @@
 ---
 name: python-project-setup
-description: Guides the agent on modern Python project scaffolding using uv, Ruff, Ty, Polars, pyproject.toml, and pre-commit enforcement.
+description: Guides the agent on modern Python project scaffolding using uv, Ruff, Ty, Polars, pyproject.toml, pre-commit enforcement (including type checking), and a GitHub Actions CI/CD workflow that enforces the same checks on every push/PR.
 ---
 
 # Python Project Setup — uv + Ruff + Ty + Polars
@@ -246,6 +246,52 @@ This ensures every commit is validated before it enters history.
 - `uv run pytest`
 
 In CI, use the same commands and prefer `uv run pre-commit run --all-files` if pre-commit is installed.
+
+### CI/CD: enforce the same checks in GitHub Actions
+
+Commit-time enforcement (pre-commit/Git hooks, above) only protects commits made
+locally — a project also needs the same checks enforced in CI, so a push that
+bypasses hooks (`--no-verify`, a direct push, a PR from a fork) still gets
+caught before merge. Wire `ty check` (never `mypy`) into a GitHub Actions
+workflow that runs on every push and pull request:
+
+```yaml
+# .github/workflows/ci.yml
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+      - name: Set up Python
+        run: uv python install
+      - name: Install dependencies
+        run: uv sync --all-extras --dev
+      - name: Ruff format check
+        run: uv run ruff format --check .
+      - name: Ruff lint
+        run: uv run ruff check .
+      - name: Type check
+        run: uv run ty check
+      - name: Run tests
+        run: uv run pytest
+```
+
+- Keep the CI steps identical in intent to the pre-commit hooks (same `ruff
+  format`, `ruff check`, `ty check` commands) so a change that passes locally
+  is guaranteed to pass in CI, and vice versa — divergence between the two is
+  a common source of "works on my machine, fails in CI" surprises.
+- Treat this workflow as required for merge (branch protection requiring the
+  job to pass) — commit-time hooks alone are advisory, since they can be
+  skipped; CI is the actual enforcement point.
+- When scaffolding a new project, create this workflow file alongside the
+  pre-commit configuration in the same setup pass, not as a follow-up task —
+  both are part of "project setup," not optional hardening added later.
 
 ## 9. What not to do
 

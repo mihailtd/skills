@@ -132,3 +132,11 @@ FROM employee_tree;
 - Test materialization behavior with `EXPLAIN` and adjust `MATERIALIZED`
   hints only when needed.
 - Keep recursive queries bounded and indexed on the parent-child key.
+
+---
+
+## Related guidance
+
+SQL antipattern(s) this resolves (from the `sql-antipatterns` package):
+
+- sql-antipatterns-spaghetti-query

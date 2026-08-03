@@ -1,7 +1,7 @@
 ---
 name: database-redis-caching-strategy
 
-description: Instructs the agent on advanced Redis caching strategies, including managing TTLs to prevent memory bloat, applying jitter to prevent cache stampedes, and using Lua scripting for atomic server-side caching.
+description: Instructs the agent on advanced Redis caching strategies, including managing TTLs to prevent memory bloat, applying jitter to prevent cache stampedes, choosing String vs Hash based on access pattern, and using Lua scripting for atomic server-side caching.
 ---
 
 # Redis Caching Strategy Guidelines
@@ -20,7 +20,13 @@ Avoid setting the exact same TTL for multiple keys that are created or updated s
 *   Simultaneous expiration causes a "cache stampede," where the application is flooded with cache misses, forcing it to violently query the primary database and potentially crash the system.
 *   **The Jitter Solution:** To prevent stampedes, add a small random "jitter" (a slight variation in seconds) to the TTL of different keys so they expire gradually over a window of time.
 
-## 3. Atomic Server-Side Caching (Lua Scripting)
+## 3. Choose String or Hash Based on Access Pattern, Not Habit
+Don't default to caching every object as a single serialized string (e.g. a JSON blob) if callers routinely only need a subset of its fields.
+*   If a cached object is always read and written whole (e.g. a full rendered page fragment), a **String** is the right, simplest choice — one `GET`/`SET`, no per-field overhead.
+*   If callers frequently need only a few fields of a wider object (e.g. just `post_status` and `post_date` out of a full blog post record), cache it as a **Hash** instead and fetch with `HMGET`/`HGET` — this avoids deserializing and transferring the entire blob just to read one or two fields, cutting both bandwidth and client-side CPU.
+*   This is a read-pattern decision, not a data-type default: the same entity might be worth caching as a String in one service (which always needs the whole object) and as a Hash in another (which only ever needs a summary view).
+
+## 4. Atomic Server-Side Caching (Lua Scripting)
 When implementing the cache-aside pattern for complex or expensive computations, avoid race conditions where multiple clients might try to recompute and cache the same missing data simultaneously.
 *   Push the caching logic directly into Redis using server-side Lua Scripts.
 *   Use the `EVAL` command to execute a script that checks if a key exists, returns it if it does, or computes/sets the new value and TTL if it doesn't.
@@ -50,7 +56,26 @@ async def cache_daily_feed(user_id: str, feed_data: str) -> None:
     await client.set(f"feed:user:{user_id}", feed_data, ex=base_ttl + jitter)
 ```
 
-**2. Atomic Cache-Aside Pattern with Lua Scripting**
+**2. Hash Caching for Partial-Field Reads**
+```python
+from redis import asyncio as aioredis
+
+client = aioredis.from_url("redis://localhost")
+
+async def cache_post_metadata(post_id: str, post: dict) -> None:
+    """Cache as a Hash when callers routinely only need a few fields, not the whole post."""
+    await client.hset(f"wp:posts:{post_id}", mapping=post)
+    await client.expire(f"wp:posts:{post_id}", 3600)
+
+async def get_post_summary(post_id: str) -> dict:
+    """Fetch only the fields needed for a list view — no full-post deserialization."""
+    status, modified, published = await client.hmget(
+        f"wp:posts:{post_id}", ["post_status", "post_modified", "post_date_gmt"]
+    )
+    return {"status": status, "modified": modified, "published": published}
+```
+
+**3. Atomic Cache-Aside Pattern with Lua Scripting**
 ```python
 from redis import asyncio as aioredis
 from collections.abc import Callable

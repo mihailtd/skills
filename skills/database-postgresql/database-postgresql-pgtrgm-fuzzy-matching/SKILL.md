@@ -101,3 +101,11 @@ ON documents USING GIST (content gist_trgm_ops);
   build that index."
 - "Demonstrate how to speed up fuzzy regex and ILIKE searches with PostgreSQL
   trigram indexes."
+
+---
+
+## Related guidance
+
+SQL antipattern(s) this resolves (from the `sql-antipatterns` package):
+
+- sql-antipatterns-poor-mans-search-engine

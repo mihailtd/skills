@@ -169,3 +169,7 @@ Use this tool alongside:
 - python-lang-graph-error-handling
 - python-lang-graph-output-parsing
 - python-lang-graph-checkpoints
+- python-lang-graph-workflow-vs-agent-patterns
+- python-lang-graph-agent-suitability
+- python-fastmcp-server-basics
+- python-fastmcp-client-integration

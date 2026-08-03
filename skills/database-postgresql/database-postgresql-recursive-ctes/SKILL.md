@@ -101,3 +101,11 @@ FROM employee_hierarchy;
 
 Use recursive CTEs when the data is naturally hierarchical and the query needs to
 explore multiple levels dynamically.
+
+---
+
+## Related guidance
+
+SQL antipattern(s) this resolves (from the `sql-antipatterns` package):
+
+- sql-antipatterns-naive-trees

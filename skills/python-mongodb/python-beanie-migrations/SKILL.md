@@ -95,3 +95,7 @@ Migrations run inside a transaction by default, which requires a replica set (th
 - Run migrations in CI/CD the same way Alembic migrations are run for the relational path: as an explicit deploy step, never implicitly on app startup.
 - Keep migrations idempotent where possible — running `beanie migrate` twice against an already-migrated database should be a no-op, not an error.
 - Treat applied migrations as immutable, exactly like Alembic revisions: to fix a mistake, write a new migration, don't edit a merged one.
+
+## 7. Related guidance
+
+- **architecture-data-storage-schema-evolution** (package `architecture`) — for a field rename or shape change too risky to make in one migration/deploy without downtime, sequence it as expand (add the new field) → dual-write → backfill (this skill's `@iterative_migration`) → cutover → contract (drop the old field in a later migration), each paired with its own app-code release, rather than collapsing it into one `Forward`/`Backward` pair.

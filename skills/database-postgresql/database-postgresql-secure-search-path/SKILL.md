@@ -29,3 +29,11 @@ Follow these structured guidelines to assist the user:
 
 #### 5. Securing Database Restorations
 *   **Emptying the Path:** Inform the user that when performing database backups and restorations, tools like `pg_dump` deliberately set the `search_path` to empty (`SELECT pg_catalog.set_config('search_path', '', false);`). Explain that this is a critical defense mechanism to ensure that restored objects do not exploit malicious code that may have tainted the environment's search path.
+
+---
+
+## Related guidance
+
+SQL antipattern(s) this resolves (from the `sql-antipatterns` package):
+
+- sql-antipatterns-sql-injection
